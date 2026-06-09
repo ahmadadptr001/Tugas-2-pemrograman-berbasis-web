@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histori Transaksi - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-weight: bold; font-size: 12px; }
+        .filter-group input, .filter-group select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; min-width: 160px; }
+        .btn-reset { background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Histori Transaksi Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html" class="active">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Histori Transaksi Pemesanan Bahan Ajar</h2>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Cari NIM / Nama</label>
+                <input type="text" v-model="searchText" placeholder="NIM atau Nama">
+            </div>
+            <div class="filter-group">
+                <label>Status</label>
+                <select v-model="filterStatus">
+                    <option value="">Semua</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Urutkan</label>
+                <select v-model="sortBy">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                </select>
+            </div>
+            <button class="btn-reset" @click="resetFilter">Reset Filter</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nomor DO</th>
+                        <th>Tanggal Kirim</th>
+                        <th>NIM</th>
+                        <th>Nama Penerima</th>
+                        <th>Paket</th>
+                        <th>Ekspedisi</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in filteredHistori" :key="item.doNumber">
+                        <td>{{ item.doNumber }}</td>
+                        <td>{{ item.tanggalKirim }}</td>
+                        <td>{{ item.nim }}</td>
+                        <td>{{ item.nama }}</td>
+                        <td>{{ item.paket }}</td>
+                        <td>{{ item.ekspedisi }}</td>
+                        <td><span :class="'status-badge status-' + item.status.replace(/ /g, '_')">{{ item.status }}</span></td>
+                        <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+                    </tr>
+                    <tr v-if="filteredHistori.length === 0">
+                        <td colspan="8" style="text-align:center;">Tidak ada histori transaksi</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Popup logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tracking: {},
+            searchText: '',
+            filterStatus: '',
+            sortBy: 'newest',
+            showLogoutPopup: false
+        },
+        computed: {
+            historiList() {
+                let list = Object.entries(this.tracking).map(([doNumber, data]) => ({
+                    doNumber,
+                    ...data
+                }));
+                if (this.sortBy === 'newest') {
+                    list.sort((a,b) => new Date(b.tanggalKirim) - new Date(a.tanggalKirim));
+                } else {
+                    list.sort((a,b) => new Date(a.tanggalKirim) - new Date(b.tanggalKirim));
+                }
+                return list;
+            },
+            filteredHistori() {
+                let result = [...this.historiList];
+                if (this.searchText) {
+                    const lower = this.searchText.toLowerCase();
+                    result = result.filter(item => 
+                        item.nim.toLowerCase().includes(lower) || 
+                        item.nama.toLowerCase().includes(lower)
+                    );
+                }
+                if (this.filterStatus) {
+                    result = result.filter(item => item.status === this.filterStatus);
+                }
+                return result;
+            }
+        },
+        async mounted() {
+            this.tracking = await API.getAllTracking();
+        },
+        methods: {
+            resetFilter() {
+                this.searchText = '';
+                this.filterStatus = '';
+                this.sortBy = 'newest';
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>

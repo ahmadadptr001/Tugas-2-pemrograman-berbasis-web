@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Bahan Ajar - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-section {
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+            gap: 12px; margin: 20px auto; padding: 15px; background: #f8f9fa;
+            border-radius: 8px; max-width: 95%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 12px; font-weight: bold; color: #555; }
+        .filter-select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; min-width: 160px; }
+        .reset-btn { background: #dc3545; color: white; border: none; padding: 9px 14px; border-radius: 6px; cursor: pointer; }
+        .reset-btn:hover { background: #c82333; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px; width: auto;">
+            <h1>Informasi Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html" class="active">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Informasi Data Bahan Ajar</h2>
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>UT-Daerah</label>
+                <select class="filter-select" v-model="filters.upbjj">
+                    <option value="">Semua UT-Daerah</option>
+                    <option v-for="item in upbjjList" :value="item">{{ item }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Kategori</label>
+                <select class="filter-select" v-model="filters.kategori" :disabled="!filters.upbjj">
+                    <option value="">Semua Kategori</option>
+                    <option v-for="item in kategoriList" :value="item">{{ item }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Status Stok</label>
+                <select class="filter-select" v-model="filters.statusStok">
+                    <option value="">Semua Status</option>
+                    <option value="reorder">Butuh Re-order</option>
+                    <option value="kosong">Stok Kosong</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Urutkan</label>
+                <select class="filter-select" v-model="sortBy">
+                    <option value="">-- Tanpa Urutan --</option>
+                    <option value="judul">Judul</option>
+                    <option value="qty">Jumlah Stok</option>
+                    <option value="harga">Harga</option>
+                </select>
+            </div>
+            <button class="reset-btn" @click="resetFilters"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Cover</th><th>Kode</th><th>Judul</th><th>Kategori</th><th>UPBJJ</th><th>Lokasi Rak</th><th>Harga</th><th>Jumlah</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, idx) in filteredStok" :key="idx">
+                        <td><img v-if="item.cover" :src="'../assets/img/' + item.cover" class="table-cover" style="width:40px"><span v-else>No img</span></td>
+                        <td>{{ item.kode }}</td><td>{{ item.judul }}</td><td>{{ item.kategori }}</td><td>{{ item.upbjj }}</td>
+                        <td>{{ item.lokasiRak }}</td><td>Rp {{ item.harga.toLocaleString('id-ID') }}</td><td>{{ item.qty }}</td>
+                        <td class="status-cell">
+                            <span v-if="item.qty == 0" class="status-badge-custom status-kosong">❌ Kosong</span>
+                            <span v-else-if="item.qty < item.safety" class="status-badge-custom status-menipis">⚠ Menipis</span>
+                            <span v-else class="status-badge-custom status-aman">✔ Aman</span>
+                        </td>
+                        <td v-html="item.catatanHTML"></td>
+                        <td><button class="edit-button" @click="openEdit(item)">Edit</button> <button class="delete-button" @click="openDelete(item)">Hapus</button></td>
+                    </tr>
+                    <tr v-if="filteredStok.length === 0"><td colspan="11">Data tidak ditemukan</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="add-button-container"><button class="primary-button" @click="openAdd">+ Tambah Data Bahan Ajar Baru</button></div>
+
+        <!-- Modal Edit -->
+        <div class="edit-modal" v-if="showEditModal">
+            <div class="edit-box">
+                <h2>EDIT DATA</h2>
+                <div class="edit-form-grid">
+                    <input type="text" placeholder="Kode" v-model="editItem.kode">
+                    <input type="text" placeholder="Judul" v-model="editItem.judul">
+                    <select v-model="editItem.kategori"><option value="">Pilih Kategori</option><option v-for="k in kategoriList" :value="k">{{ k }}</option></select>
+                    <select v-model="editItem.upbjj"><option value="">Pilih UPBJJ</option><option v-for="u in upbjjList" :value="u">{{ u }}</option></select>
+                    <input type="text" placeholder="Lokasi Rak" v-model="editItem.lokasiRak">
+                    <input type="number" placeholder="Harga" v-model="editItem.harga">
+                    <input type="number" placeholder="Qty" v-model="editItem.qty">
+                    <input type="number" placeholder="Safety Stock" v-model="editItem.safety">
+                </div>
+                <textarea placeholder="Catatan HTML" v-model="editItem.catatanHTML"></textarea>
+                <div class="edit-buttons"><button class="cancel-edit-btn" @click="showEditModal=false">Batal</button><button class="save-edit-btn" @click="saveEdit">Simpan</button></div>
+            </div>
+        </div>
+
+        <!-- Modal Tambah -->
+        <div class="edit-modal" v-if="showAddModal">
+            <div class="edit-box">
+                <h2>TAMBAH BAHAN AJAR</h2>
+                <div class="edit-form-grid">
+                    <input type="text" placeholder="Nama file cover (contoh: buku.jpg)" v-model="newItem.cover">
+                    <input type="text" placeholder="Kode" v-model="newItem.kode">
+                    <input type="text" placeholder="Judul" v-model="newItem.judul">
+                    <select v-model="newItem.kategori"><option value="">Pilih Kategori</option><option v-for="k in kategoriList" :value="k">{{ k }}</option></select>
+                    <select v-model="newItem.upbjj"><option value="">Pilih UPBJJ</option><option v-for="u in upbjjList" :value="u">{{ u }}</option></select>
+                    <input type="text" placeholder="Lokasi Rak" v-model="newItem.lokasiRak">
+                    <input type="number" placeholder="Harga" v-model="newItem.harga">
+                    <input type="number" placeholder="Qty" v-model="newItem.qty">
+                    <input type="number" placeholder="Safety Stock" v-model="newItem.safety">
+                </div>
+                <textarea placeholder="Catatan HTML" v-model="newItem.catatanHTML"></textarea>
+                <div class="edit-buttons"><button class="cancel-edit-btn" @click="showAddModal=false">Batal</button><button class="save-edit-btn" @click="saveAdd">Simpan</button></div>
+            </div>
+        </div>
+
+        <!-- Popup sukses -->
+        <div class="success-popup" v-if="showSuccessPopup"><div class="success-box"><div class="success-icon">✔</div><h2>Berhasil!</h2><p>Data tersimpan.</p><button @click="showSuccessPopup=false">OK</button></div></div>
+
+        <!-- Popup hapus -->
+        <div class="delete-popup" v-if="showDeletePopup"><div class="logout-box"><div class="logout-icon"><i class="fa-solid fa-trash"></i></div><h2>Hapus Data?</h2><p>Yakin hapus <strong>{{ deleteItemName }}</strong>?</p><div class="logout-buttons"><button @click="showDeletePopup=false">Batal</button><button @click="confirmDelete">Ya, Hapus</button></div></div></div>
+
+        <!-- Popup konfirmasi logout -->
+        <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+            <div class="logout-box">
+                <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+                <h2>Apakah anda ingin keluar?</h2>
+                <p>Sesi login akan diakhiri.</p>
+                <div class="logout-buttons">
+                    <button @click="showLogoutPopup = false">Batal</button>
+                    <button @click="confirmLogout">Keluar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/dataBahanAjar.js"></script>
+</body>
+</html>

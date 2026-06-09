@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Pengiriman - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Tracking Pengiriman</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html" class="active">Tracking Pengiriman</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="tracking-form-box">
+            <h2>Tracking DO</h2>
+            <label>Nomor DO:</label>
+            <input type="text" :value="generatedDO" readonly class="readonly-input">
+            <label>NIM:</label>
+            <input type="text" v-model="newTracking.nim" placeholder="Contoh: 230411100001">
+            <label>Nama:</label>
+            <input type="text" v-model="newTracking.nama" placeholder="Contoh: Rina Wulandari">
+            <div class="tracking-row">
+                <div><label>Ekspedisi:</label><select v-model="newTracking.ekspedisi"><option value="">Pilih</option><option v-for="item in pengirimanList" :value="item.nama">{{ item.nama }}</option></select></div>
+                <div><label>Paket Bahan Ajar:</label><select v-model="newTracking.paket"><option value="">Pilih Paket</option><option v-for="item in paket" :value="item.kode">{{ item.kode }} - {{ item.nama }}</option></select></div>
+                <div><label>Tanggal Kirim:</label><input type="date" v-model="newTracking.tanggalKirim"></div>
+            </div>
+            <div v-if="selectedPaket" class="detail-paket">
+                <h4>Detail Paket</h4>
+                <p><strong>Kode:</strong> {{ selectedPaket.kode }}</p><p><strong>Nama:</strong> {{ selectedPaket.nama }}</p>
+                <p><strong>Isi Paket:</strong></p><ul><li v-for="isi in selectedPaket.isi">{{ isi }}</li></ul>
+                <p><strong>Total Harga:</strong> Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}</p>
+            </div>
+            <button type="button" @click="addTracking">Tambah DO Baru</button>
+        </section>
+        <section class="tracking-table">
+            <h2>Daftar Tracking DO</h2>
+            <table>
+                <thead><tr><th>Nomor DO</th><th>NIM</th><th>Nama</th><th>Ekspedisi</th><th>Paket</th><th>Tanggal Kirim</th><th>Total</th></tr></thead>
+                <tbody>
+                    <tr v-for="(item, key) in tracking" :key="key">
+                        <td>{{ key }}</td><td>{{ item.nim }}</td><td>{{ item.nama }}</td><td>{{ item.ekspedisi }}</td><td>{{ item.paket }}</td><td>{{ item.tanggalKirim }}</td><td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Popup konfirmasi logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/dataBahanAjar.js"></script>
+</body>
+</html>

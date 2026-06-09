@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Bahan Ajar - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .rekap-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .rekap-title {
+            color: #f57c00;
+            border-bottom: 2px solid #f57c00;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .summary-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f57c00;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .sub-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .sub-table th {
+            background: #ff9800;
+            color: white;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Rekap Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html" class="active">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Rekap Data Bahan Ajar</h2>
+
+        <!-- Ringkasan global -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Ringkasan Global</h3>
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalBuku }}</div>
+                    <div class="stat-label">Total Judul Buku</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalStok }}</div>
+                    <div class="stat-label">Total Stok Semua UPBJJ</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalNilai }}</div>
+                    <div class="stat-label">Total Nilai Inventori (Rp)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekap per UPBJJ -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Rekap per UPBJJ</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>UPBJJ</th><th>Jumlah Judul</th><th>Total Stok</th><th>Total Nilai (Rp)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in rekapUPBJJ" :key="item.upbjj">
+                            <td>{{ item.upbjj }}</td>
+                            <td>{{ item.jumlahJudul }}</td>
+                            <td>{{ item.totalStok }}</td>
+                            <td>{{ formatRupiah(item.totalNilai) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rekap per Kategori -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Rekap per Kategori Mata Kuliah</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>Kategori</th><th>Jumlah Judul</th><th>Total Stok</th><th>Total Nilai (Rp)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in rekapKategori" :key="item.kategori">
+                            <td>{{ item.kategori }}</td>
+                            <td>{{ item.jumlahJudul }}</td>
+                            <td>{{ item.totalStok }}</td>
+                            <td>{{ formatRupiah(item.totalNilai) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Peringatan Stok Menipis -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Peringatan Stok Menipis (Qty < Safety Stock)</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>Kode</th><th>Judul</th><th>UPBJJ</th><th>Stok</th><th>Safety Stock</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in stokMenipis" :key="item.kode">
+                            <td>{{ item.kode }}</td>
+                            <td>{{ item.judul }}</td>
+                            <td>{{ item.upbjj }}</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ item.safety }}</td>
+                        </tr>
+                        <tr v-if="stokMenipis.length === 0"><td colspan="5">Semua stok aman</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Popup logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            stok: [],
+            showLogoutPopup: false
+        },
+        computed: {
+            totalBuku() {
+                return this.stok.length;
+            },
+            totalStok() {
+                return this.stok.reduce((sum, item) => sum + (item.qty || 0), 0);
+            },
+            totalNilai() {
+                return this.stok.reduce((sum, item) => sum + ((item.harga || 0) * (item.qty || 0)), 0);
+            },
+            rekapUPBJJ() {
+                const map = new Map();
+                this.stok.forEach(item => {
+                    const upbjj = item.upbjj;
+                    if (!map.has(upbjj)) {
+                        map.set(upbjj, { upbjj, jumlahJudul: 0, totalStok: 0, totalNilai: 0 });
+                    }
+                    const rec = map.get(upbjj);
+                    rec.jumlahJudul++;
+                    rec.totalStok += item.qty;
+                    rec.totalNilai += (item.harga * item.qty);
+                });
+                return Array.from(map.values());
+            },
+            rekapKategori() {
+                const map = new Map();
+                this.stok.forEach(item => {
+                    const kat = item.kategori;
+                    if (!map.has(kat)) {
+                        map.set(kat, { kategori: kat, jumlahJudul: 0, totalStok: 0, totalNilai: 0 });
+                    }
+                    const rec = map.get(kat);
+                    rec.jumlahJudul++;
+                    rec.totalStok += item.qty;
+                    rec.totalNilai += (item.harga * item.qty);
+                });
+                return Array.from(map.values());
+            },
+            stokMenipis() {
+                return this.stok.filter(item => item.qty < item.safety);
+            }
+        },
+        async mounted() {
+            this.stok = await API.getAllStok();
+        },
+        methods: {
+            formatRupiah(value) {
+                return 'Rp ' + value.toLocaleString('id-ID');
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>

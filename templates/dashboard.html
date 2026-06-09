@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="wave-container">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+    </div>
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" class="LogoUTPutih" style="height: 70px !important; width: auto !important; max-height: 70px !important;">
+            <h1>Dashboard</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="active">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn" id="laporanBtn">Laporan <span id="arrow">▼</span></button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO Bahan Ajar</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi Bahan Ajar</a></li>
+                <li><a href="#">Histori Transaksi Bahan Ajar</a></li>
+                <li><button id="logout-btn" class="logout-button">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="greeting">
+            <div>
+                <h2 id="greeting-message">Selamat Datang!</h2>
+                <p>Anda login sebagai <span id="user-info">Pengguna SITTA</span>.</p>
+            </div>
+            <img src="../assets/img/LogoUT.png" alt="Logo UT" class="greeting-logo">
+        </section>
+        <section class="dashboard-menu">
+            <a href="stock.html" class="menu-card">
+                <div class="icon">📚</div>
+                <div class="text">
+                    <h3>Informasi Bahan Ajar</h3>
+                    <p>Kelola data bahan ajar</p>
+                </div>
+            </a>
+            <a href="tracking.html" class="menu-card">
+                <div class="icon">🚚</div>
+                <div class="text">
+                    <h3>Tracking Pengiriman</h3>
+                    <p>Pantau status pengiriman</p>
+                </div>
+            </a>
+            <a href="#" class="menu-card">
+                <div class="icon">📑</div>
+                <div class="text">
+                    <h3>Laporan</h3>
+                    <p>Monitoring Progress DO dan Rekap Data Bahan Ajar</p>
+                </div>
+            </a>
+            <a href="#" class="menu-card">
+                <div class="icon">🔄</div>
+                <div class="text">
+                    <h3>Histori Transaksi</h3>
+                    <p>Riwayat semua aktivitas</p>
+                </div>
+            </a>
+        </section>
+    </main>
+    <div id="logout-popup" class="logout-popup">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button id="cancel-logout">Batal</button>
+                <button id="confirm-logout">Keluar</button>
+            </div>
+        </div>
+    </div>
+    <script src="../js/components/script.js"></script>
+    <script>
+        // dropdown manual (karena tidak pakai Vue di dashboard)
+        const laporanBtn = document.getElementById('laporanBtn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const arrow = document.getElementById('arrow');
+        if(laporanBtn) {
+            laporanBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownContent.classList.toggle('show');
+                arrow.textContent = dropdownContent.classList.contains('show') ? '▲' : '▼';
+            });
+            window.addEventListener('click', () => {
+                dropdownContent.classList.remove('show');
+                arrow.textContent = '▼';
+            });
+        }
+    </script>
+</body>
+</html>

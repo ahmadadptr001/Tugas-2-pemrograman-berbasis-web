@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SITTA UT</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div id="app">
+    <main class="login-container">
+        <div class="login-logo-container">
+            <img src="../assets/img/LogoUT.png" alt="Logo UT" class="login-logo">
+            <h2 class="welcome-text">Selamat Datang di SITTA UT</h2>
+            <h4>Pemesanan Bahan Ajar UT</h4>
+        </div>
+        <form @submit.prevent="login">
+            <label>Email</label>
+            <input type="email" v-model="email" required placeholder="email@ut.ac.id">
+            <label>Password</label>
+            <div class="password-box">
+                <input :type="showPassword ? 'text' : 'password'" v-model="password" required placeholder="password">
+                <button type="button" class="lihat-password" @click="togglePassword">
+                    <i :class="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                </button>
+            </div>
+            <button type="submit" id="login-button">Masuk</button>
+        </form>
+        <p><button class="link-button" @click="showForgotModal = true">Lupa password?</button></p>
+        <p>Belum punya akun? <button class="link-button" @click="showRegisterModal = true">Daftar</button></p>
+    </main>
+    <div v-if="showForgotModal" class="success-popup"><div class="success-box"><div class="warning-icon"><i class="fa-solid fa-exclamation"></i></div><h2>Lupa Password</h2><p>Reset password hanya oleh Admin SITTA.</p><button @click="showForgotModal=false">OK</button></div></div>
+    <div v-if="showRegisterModal" class="success-popup"><div class="success-box"><div class="warning-icon"><i class="fa-solid fa-exclamation"></i></div><h2>Pendaftaran Akun</h2><p>Daftar hanya oleh Admin SITTA.</p><button @click="showRegisterModal=false">OK</button></div></div>
+    <div v-if="showSuccessPopup" class="success-popup"><div class="success-box"><div class="success-icon"><i class="fa-solid fa-check"></i></div><h2>Selamat {{ loggedInUser.nama }}</h2><p>Berhasil masuk ke SITTA-UT</p><button @click="goDashboard">OK</button></div></div>
+    <div class="footer"><p>© 2026 Universitas Terbuka | SITTA</p></div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/login.js"></script>
+</body>
+</html>

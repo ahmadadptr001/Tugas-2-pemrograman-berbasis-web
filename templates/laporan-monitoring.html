@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Progress DO - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .status-Diproses { background: #ffc107; color: #333; }
+        .status-Dikirim { background: #17a2b8; color: white; }
+        .status-Dalam_Perjalanan { background: #fd7e14; color: white; }
+        .status-Selesai { background: #28a745; color: white; }
+        .filter-bar { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-weight: bold; font-size: 12px; }
+        .filter-group select, .filter-group input { padding: 8px; border-radius: 6px; border: 1px solid #ccc; min-width: 160px; }
+        .btn-reset { background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+        .detail-link { color: #007bff; text-decoration: none; cursor: pointer; }
+        .detail-link:hover { text-decoration: underline; }
+        .modal-detail .modal-content { max-width: 600px; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Monitoring Progress DO</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html" class="active">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Monitoring Progress Delivery Order (DO)</h2>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Status</label>
+                <select v-model="filterStatus">
+                    <option value="">Semua</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Cari NIM / Nama</label>
+                <input type="text" v-model="searchText" placeholder="NIM atau Nama">
+            </div>
+            <button class="btn-reset" @click="resetFilter">Reset Filter</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nomor DO</th>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Status</th>
+                        <th>Ekspedisi</th>
+                        <th>Tanggal Kirim</th>
+                        <th>Total</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(doItem, doNumber) in filteredTracking" :key="doNumber">
+                        <td>{{ doNumber }}</td>
+                        <td>{{ doItem.nim }}</td>
+                        <td>{{ doItem.nama }}</td>
+                        <td><span :class="'status-badge status-' + doItem.status.replace(/ /g, '_')">{{ doItem.status }}</span></td>
+                        <td>{{ doItem.ekspedisi }}</td>
+                        <td>{{ doItem.tanggalKirim }}</td>
+                        <td>Rp {{ doItem.total.toLocaleString('id-ID') }}</td>
+                        <td><a href="#" class="detail-link" @click.prevent="showDetail(doNumber)">Lihat Timeline</a></td>
+                    </tr>
+                    <tr v-if="Object.keys(filteredTracking).length === 0">
+                        <td colspan="8" style="text-align:center;">Tidak ada data DO</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal Detail Timeline -->
+    <div class="modal" v-if="showModal" @click.self="showModal=false">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-btn" @click="showModal=false">&times;</span>
+            <h3>Timeline Pengiriman</h3>
+            <p><strong>Nomor DO:</strong> {{ selectedDO }}</p>
+            <p><strong>Penerima:</strong> {{ selectedData?.nama }} ({{ selectedData?.nim }})</p>
+            <ul class="timeline" style="margin-top: 20px;">
+                <li v-for="(event, idx) in selectedData?.perjalanan" :key="idx">
+                    <strong>{{ event.waktu }}</strong><br>
+                    <span>{{ event.keterangan }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Popup konfirmasi logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tracking: {},
+            filterStatus: '',
+            searchText: '',
+            showModal: false,
+            selectedDO: '',
+            selectedData: null,
+            showLogoutPopup: false
+        },
+        computed: {
+            filteredTracking() {
+                let result = { ...this.tracking };
+                if (this.filterStatus) {
+                    result = Object.fromEntries(
+                        Object.entries(result).filter(([_, val]) => val.status === this.filterStatus)
+                    );
+                }
+                if (this.searchText) {
+                    const lowerSearch = this.searchText.toLowerCase();
+                    result = Object.fromEntries(
+                        Object.entries(result).filter(([_, val]) => 
+                            val.nim.toLowerCase().includes(lowerSearch) || 
+                            val.nama.toLowerCase().includes(lowerSearch)
+                        )
+                    );
+                }
+                return result;
+            }
+        },
+        async mounted() {
+            this.tracking = await API.getAllTracking();
+        },
+        methods: {
+            showDetail(doNumber) {
+                this.selectedDO = doNumber;
+                this.selectedData = this.tracking[doNumber];
+                this.showModal = true;
+            },
+            resetFilter() {
+                this.filterStatus = '';
+                this.searchText = '';
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>
