@@ -1206,3 +1206,7 @@ td img {
 .readonly-input {
     background: #f1f1f1;
 }
+
+.success-icon i {
+    font-size: 45px;
+}

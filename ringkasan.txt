@@ -1,0 +1,3199 @@
+=== ./.editorconfig ===
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
+charset = utf-8
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+max_line_length = 100
+
+=== ./.gitattributes ===
+* text=auto eol=lf
+
+=== ./.gitignore ===
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+.eslintcache
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
+
+# Vite
+*.timestamp-*-*.mjs
+
+=== ./.oxfmtrc.json ===
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true
+}
+
+=== ./.oxlintrc.json ===
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
+  "env": {
+    "browser": true
+  },
+  "categories": {
+    "correctness": "error"
+  }
+}
+
+=== ./.vscode/extensions.json ===
+{
+  "recommendations": [
+    "Vue.volar",
+    "dbaeumer.vscode-eslint",
+    "EditorConfig.EditorConfig",
+    "oxc.oxc-vscode"
+  ]
+}
+
+=== ./.vscode/settings.json ===
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "tsconfig.json": "tsconfig.*.json, env.d.ts, typed-router.d.ts",
+    "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
+    "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .oxlint*, oxlint*, .oxfmt*, .prettier*, prettier*, .editorconfig"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode"
+}
+
+=== ./assets/css/styles.css ===
+:root {
+    --primary-color: hsl(210, 100%, 30%);
+    --secondary-color: #f0f0f0;
+    --text-color: #333;
+    --success-color: #4CAF50;
+    --error-color: #f44336;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/BGUT.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+.login-logo-container {
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.login-logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto 15px auto;
+    object-fit: contain;
+}
+
+.welcome-text {
+    color: #004d99;
+    margin-bottom: 2px;
+}
+
+.password-box {
+    position: relative;
+    width: 100%;
+}
+
+.password-box input {
+    width: 100%;
+    padding-right: 50px;
+    box-sizing: border-box;
+}
+
+.lihat-password {
+    position: absolute;
+    right: 12px;
+    top: 40%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 15px;
+    z-index: 999;
+    padding: 0;
+    width: auto;
+    color: #333;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+.login-container h2 {
+    color: #004d99;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer {
+    z-index: 2;
+    position: fixed;
+}
+
+.header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1.5em;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu a, .dropbtn, .logout-button {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-menu a:hover, .nav-menu .active, .dropbtn:hover, .logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    width: 100%;
+    background-color: rgb(234, 181, 5);
+    color: navy;
+    text-align: center;
+}
+
+.footer p {
+    margin: 5px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-content {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+#login-button, .primary-button {
+    background-color: orange;
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#login-button:hover, .primary-button:hover {
+    background-color: #FF9800;
+}
+
+.success-button {
+    background-color: var(--success-color);
+    color: white;
+    margin-right: 10px;
+}
+
+.secondary-button {
+    background-color: #ccc;
+    color: var(--text-color);
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    text-decoration: underline;
+    padding: 0;
+}
+
+.delete-button {
+    background-color: var(--error-color);
+    color: white;
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.greeting {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.greeting-logo {
+    width: 100px;
+    height: auto;
+}
+
+.dashboard-menu {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.menu-card {
+    flex: 1;
+    min-width: 220px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 5;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    background: #fff7ef;
+}
+
+.icon {
+    font-size: 28px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: white;
+}
+
+.menu-card:nth-child(1) .icon {
+    background: #FF9800;
+}
+
+.menu-card:nth-child(2) .icon {
+    background: #FF9800;
+}
+
+.menu-card:nth-child(3) .icon {
+    background: #FF9800;
+}
+
+.menu-card:nth-child(4) .icon {
+    background: #FF9800;
+}
+
+.text h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.text p {
+    margin: 3px 0 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.tracking-input, .tracking-result {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.summary-box {
+    background-color: #e6f0ff;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 5px solid var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.status-badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    font-size: 13px;
+    background-color: green;
+}
+
+.status-badge.Dikirim {
+    background-color: var(--success-color);
+}
+
+.status-badge.Perjalanan {
+    background-color: orange;
+}
+
+.status-badge.Selesai {
+    background-color: green;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.timeline {
+    list-style: none;
+    padding: 0;
+    position: relative;
+    margin-left: 20px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: #ccc;
+}
+
+.timeline li {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.timeline li::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 3px solid white;
+}
+
+.timeline li:first-child::before {
+    background-color: var(--success-color);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: orange;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+td img {
+    max-width: 50px;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.stock-form input {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .nav-menu li {
+        margin: 5px 0;
+    }
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dashboard-page {
+    background-color: rgb(244, 244, 244);
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.dashboard-page::before {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 320px;
+    background: url('../img/LogoUT.png') center/contain no-repeat;
+    opacity: 0.08;
+    z-index: -1;
+}
+
+.wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 220px;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 220px;
+    border-radius: 43%;
+}
+
+.wave1 {
+    background: orange;
+    bottom: -90px;
+    left: -50%;
+    opacity: 0.9;
+    animation: animateWave 10s linear infinite;
+}
+
+.wave2 {
+    background: gold;
+    bottom: -110px;
+    left: -30%;
+    opacity: 0.7;
+    animation: animateWave2 14s linear infinite;
+}
+
+@keyframes animateWave {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-25%);
+    }
+}
+
+@keyframes animateWave2 {
+    0% {
+        transform: translateX(-25%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.add-button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.notif {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.notif.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notif.success {
+    background-color: #4CAF50;
+}
+
+.notif.error {
+    background-color: #f44336;
+}
+
+#tracking-form button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#tracking-form button:hover {
+    background-color: #43a047;
+}
+
+.success-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.success-box {
+    background: white;
+    width: 340px;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    animation: popupShow 0.3s ease;
+}
+
+.success-icon {
+    width: 90px;
+    height: 90px;
+    background: #5ad64b;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 20px;
+    animation: popCircle 0.5s ease;
+}
+
+.success-icon i {
+    color: white;
+    font-size: 45px;
+    animation: popCheck 0.7s ease;
+}
+
+.success-box h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.success-box p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+#success-ok-btn {
+    width: 100%;
+    background: rgb(10, 15, 104);
+    color: rgb(228, 228, 228);
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#success-ok-btn:hover {
+    background: #d84315;
+}
+
+@keyframes popupShow {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes popCircle {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes popCheck {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.3) rotate(10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+.warning-icon {
+    width: 90px;
+    height: 90px;
+    background: orange;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 20px;
+    animation: popCircle 0.5s ease;
+}
+
+.warning-icon i {
+    color: white;
+    font-size: 45px;
+    animation: popCheck 0.7s ease;
+}
+
+.logout-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.logout-box {
+    width: 340px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    animation: popupShow 0.3s ease;
+}
+
+.logout-icon {
+    width: 90px;
+    height: 90px;
+    background: orange;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 20px;
+    animation: popCircle 0.5s ease;
+}
+
+.logout-icon i {
+    color: white;
+    font-size: 45px;
+    animation: popCheck 0.7s ease;
+}
+
+.logout-box h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.logout-box p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.logout-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#cancel-logout {
+    flex: 1;
+    background: #ddd;
+    color: #333;
+}
+
+#confirm-logout {
+    flex: 1;
+    background: orangered;
+    color: white;
+}
+
+.delete-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#cancel-delete {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #ddd;
+}
+
+#confirm-delete {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: orangered;
+    color: white;
+}
+
+.status-cell {
+    text-align: center;
+}
+
+.status-badge-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    min-width: 110px;
+}
+
+.status-aman {
+    color: green;
+    font-weight: bold;
+}
+
+.status-menipis {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-kosong {
+    color: red;
+    font-weight: bold;
+}
+
+.edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.edit-box {
+    background: white;
+    width: 500px;
+    max-width: 90%;
+    padding: 30px;
+    border-radius: 20px;
+    animation: popupShow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.edit-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f57c00;
+}
+
+.edit-box input,
+.edit-box select,
+.edit-box textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.edit-box textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-button {
+    background: #2196f3;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.edit-button:hover {
+    background: #1976d2;
+}
+
+.edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.edit-box textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    resize: vertical;
+}
+
+.edit-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.cancel-edit-btn {
+    background: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cancel-edit-btn:hover {
+    background: #cfcfcf;
+}
+
+.save-edit-btn {
+    background: linear-gradient(135deg, #ff9800, #ffb300);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.save-edit-btn:hover {
+    opacity: 0.9;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 10px 20px !important;
+}
+
+.brand-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.logo-ut {
+    height: 20px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    filter: drop-shadow(1.5px 0px 0px #ffffff) drop-shadow(-1.5px 0px 0px #ffffff) drop-shadow(0px 1.5px 0px #ffffff) drop-shadow(0px -1.5px 0px #ffffff) !important;
+}
+
+.brand-container h1 {
+    margin: 0 !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+}
+
+.table-cover {
+    width: 40px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    display: block;
+    margin: 0 auto;
+}
+
+.tracking-form-box {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.tracking-form-box h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.tracking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.tracking-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.tracking-group input,
+.tracking-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.paket-preview {
+    margin-top: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 5px solid #ffa500;
+}
+
+.tracking-submit {
+    margin-top: 25px;
+    width: 100%;
+    background: #1565c0;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tracking-submit:hover {
+    background: #0d47a1;
+}
+
+@media (max-width: 768px) {
+    .tracking-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tracking-table h2 {
+    text-align: center;
+}
+
+.tracking-form-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.tracking-form-box input,
+.tracking-form-box select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.tracking-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.tracking-row div {
+    flex: 1;
+    min-width: 220px;
+}
+
+.detail-paket {
+    background: #f4f6f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.tracking-form-box button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: #ffa500;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    z-index: 999;
+}
+
+.tracking-table {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.tracking-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tracking-table th {
+    background: #ffa500;
+    color: white;
+}
+
+.tracking-table th,
+.tracking-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.readonly-input {
+    background: #f1f1f1;
+}
+=== ./data/dataBahanAjar.json ===
+{
+    "upbjjList": [
+        "Jakarta",
+        "Surabaya",
+        "Makassar",
+        "Padang",
+        "Denpasar"
+    ],
+    "kategoriList": [
+        "MK Wajib",
+        "MK Pilihan",
+        "Praktikum",
+        "Problem-Based"
+    ],
+    "pengirimanList": [
+        {
+            "kode": "REG",
+            "nama": "Reguler (3-5 hari)"
+        },
+        {
+            "kode": "EXP",
+            "nama": "Ekspres (1-2 hari)"
+        }
+    ],
+    "paket": [
+        {
+            "kode": "PAKET-UT-001",
+            "nama": "PAKET IPS Dasar",
+            "isi": [
+                "EKMA4116",
+                "EKMA4115"
+            ],
+            "harga": 120000
+        },
+        {
+            "kode": "PAKET-UT-002",
+            "nama": "PAKET IPA Dasar",
+            "isi": [
+                "BIOL4201",
+                "FISIP4001"
+            ],
+            "harga": 140000
+        }
+    ],
+    "stok": [
+        {
+            "kode": "EKMA4116",
+            "judul": "Pengantar Manajemen",
+            "kategori": "MK Wajib",
+            "upbjj": "Jakarta",
+            "lokasiRak": "R1-A3",
+            "harga": 65000,
+            "qty": 28,
+            "safety": 20,
+            "catatanHTML": "<em>Edisi 2024, cetak ulang</em>"
+        },
+        {
+            "kode": "EKMA4115",
+            "judul": "Pengantar Akuntansi",
+            "kategori": "MK Wajib",
+            "upbjj": "Jakarta",
+            "lokasiRak": "R1-A4",
+            "harga": 60000,
+            "qty": 7,
+            "safety": 15,
+            "catatanHTML": "<strong>Cover baru</strong>"
+        },
+        {
+            "kode": "BIOL4201",
+            "judul": "Biologi Umum (Praktikum)",
+            "kategori": "Praktikum",
+            "upbjj": "Surabaya",
+            "lokasiRak": "R3-B2",
+            "harga": 80000,
+            "qty": 12,
+            "safety": 10,
+            "catatanHTML": "Butuh <u>pendingin</u> untuk kit basah"
+        },
+        {
+            "kode": "FISIP4001",
+            "judul": "Dasar-Dasar Sosiologi",
+            "kategori": "MK Pilihan",
+            "upbjj": "Makassar",
+            "lokasiRak": "R2-C1",
+            "harga": 55000,
+            "qty": 2,
+            "safety": 8,
+            "catatanHTML": "Stok <i>menipis</i>, prioritaskan reorder"
+        }
+    ],
+    "tracking": [
+        {
+            "DO2025-0001": {
+                "nim": "123456789",
+                "nama": "Rina Wulandari",
+                "status": "Dalam Perjalanan",
+                "ekspedisi": "JNE",
+                "tanggalKirim": "2025-08-25",
+                "paket": "PAKET-UT-001",
+                "total": 120000,
+                "perjalanan": [
+                    {
+                        "waktu": "2025-08-25 10:12:20",
+                        "keterangan": "Penerimaan di Loket: TANGSEL"
+                    }
+                ]
+            }
+        },
+        {
+            "DO2025-0001": {
+                "nim": "123456789",
+                "nama": "Rina Wulandari",
+                "status": "Dalam Perjalanan",
+                "ekspedisi": "JNE",
+                "tanggalKirim": "2025-08-25",
+                "paket": "PAKET-UT-001",
+                "total": 120000,
+                "perjalanan": [
+                    {
+                        "waktu": "2025-08-25 10:12:20",
+                        "keterangan": "Penerimaan di Loket: TANGSEL"
+                    }
+                ]
+            }
+        }
+    ]
+}
+=== ./env.d.ts ===
+/// <reference types="vite/client" />
+
+=== ./eslint.config.ts ===
+import { globalIgnores } from 'eslint/config'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import pluginVue from 'eslint-plugin-vue'
+import pluginOxlint from 'eslint-plugin-oxlint'
+import skipFormatting from 'eslint-config-prettier/flat'
+
+// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
+// import { configureVueProject } from '@vue/eslint-config-typescript'
+// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
+// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
+
+export default defineConfigWithVueTs(
+  {
+    name: 'app/files-to-lint',
+    files: ['**/*.{vue,ts,mts,tsx}'],
+  },
+
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+
+  ...pluginVue.configs['flat/essential'],
+  vueTsConfigs.recommended,
+
+  ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
+  skipFormatting,
+)
+
+=== ./index.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT</title>
+    <script>
+        // Redirect ke halaman login
+        window.location.href = "templates/login.html";
+    </script>
+</head>
+<body>
+    <p>Mengalihkan ke halaman login...</p>
+</body>
+</html>
+=== ./js/app.js ===
+
+=== ./js/components/data.js ===
+//data.js tugas 1 DOM//
+var dataPengguna = [
+  {
+    id: 1,
+    nama: "Rina Wulandari",
+    email: "rina@ut.ac.id",
+    password: "rina123",
+    role: "UPBJJ-UT",
+    lokasi: "UPBJJ Jakarta"
+  },
+  {
+    id: 2,
+    nama: "Agus Pranoto",
+    email: "agus@ut.ac.id",
+    password: "agus123",
+    role: "UPBJJ-UT",
+    lokasi: "UPBJJ Makassar"
+  },
+  {
+    id: 3,
+    nama: "Khafifatul Isaroh",
+    email: "khafifatul@ut.ac.id",
+    password: "khafifatul123",
+    role: "UPBJJ-UT",
+    lokasi: "UPBJJ Purwokerto"
+  },
+  {
+    id: 4,
+    nama: "Siti Marlina",
+    email: "siti@ut.ac.id",
+    password: "siti123",
+    role: "Puslaba",
+    lokasi: "Pusat"
+  },
+  {
+    id: 5,
+    nama: "Doni Setiawan",
+    email: "doni@ut.ac.id",
+    password: "doni123",
+    role: "Fakultas",
+    lokasi: "FISIP"
+  },
+  {
+    id: 6,
+    nama: "Admin SITTA",
+    email: "admin@ut.ac.id",
+    password: "admin123",
+    role: "Administrator",
+    lokasi: "Pusat"
+  }
+];
+
+var dataBahanAjar = [
+  {
+    kodeLokasi: "0TMP01",
+    kodeBarang: "ASIP4301",
+    namaBarang: "Pengantar Ilmu Komunikasi",
+    jenisBarang: "BMP",
+    edisi: "2",
+    stok: 548,
+    cover: "img/pengantar_komunikasi.jpg"
+  },
+  {
+    kodeLokasi: "0JKT01",
+    kodeBarang: "EKMA4216",
+    namaBarang: "Manajemen Keuangan",
+    jenisBarang: "BMP",
+    edisi: "3",
+    stok: 392,
+    cover: "img/manajemen_keuangan.jpg"
+  },
+  {
+    kodeLokasi: "0SBY02",
+    kodeBarang: "EKMA4310",
+    namaBarang: "Kepemimpinan",
+    jenisBarang: "BMP",
+    edisi: "1",
+    stok: 278,
+    cover: "img/kepemimpinan.jpg"
+  },
+  {
+    kodeLokasi: "0MLG01",
+    kodeBarang: "BIOL4211",
+    namaBarang: "Mikrobiologi Dasar",
+    jenisBarang: "BMP",
+    edisi: "2",
+    stok: 165,
+    cover: "img/mikrobiologi.jpg"
+  },
+   {
+    kodeLokasi: "0CLP27",
+    kodeBarang: "EKMA4434",
+    namaBarang: "Sistem Informasi Manajemen",
+    jenisBarang: "BMP",
+    edisi: "3",
+    stok: 22,
+    cover: "img/Sistem Informasi Manajemen.jpg"
+  },
+  
+];
+
+var dataTracking = {
+  "2023001234": {
+    nomorDO: "2023001234",
+    nama: "Rina Wulandari",
+    status: "Dalam Perjalanan",
+    ekspedisi: "JNE",
+    tanggalKirim: "2025-08-25",
+    paket: "0JKT01",
+    total: "Rp 180.000",
+    perjalanan:[
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka"
+      },
+      {
+        waktu: "2025-08-25 14:07:56",
+        keterangan: "Tiba di Hub: TANGERANG SELATAN"
+      },      
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Diteruskan ke Kantor Jakarta Selatan"
+      },
+    ]
+  },
+  "2023005678": {
+    nomorDO: "2023001234",
+    nama: "Agus Pranoto",
+    status: "Dikirim",
+    ekspedisi: "Pos Indonesia",
+    tanggalKirim: "2025-08-25",
+    paket: "0UPBJJBDG",
+    total: "Rp 220.000",
+    perjalanan:[
+      {
+        waktu: "2025-08-25 10:12:20",
+        keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka"
+      },
+      {
+        waktu: "2025-08-25 14:07:56",
+        keterangan: "Tiba di Hub: TANGERANG SELATAN"
+      },      
+      {
+        waktu: "2025-08-25 16:30:10",
+        keterangan: "Diteruskan ke Kantor Kota Bandung"
+      },
+      {
+        waktu: "2025-08-26 12:15:33",
+        keterangan: "Tiba di Hub: Kota BANDUNG"
+      },
+      {
+        waktu: "2025-08-26 15:06:12",
+        keterangan: "Proses antar ke Cimahi"
+      },
+      {
+        waktu: "2025-08-26 20:00:00",
+        keterangan: "Selesai Antar. Penerima: Agus Pranoto"
+      }
+    ]
+  },
+  "2026092004": {
+    nomorDO: "2026092004",
+    nama: "Khafifatul Isaroh",
+    status: "Selesai",
+    ekspedisi: "Ninja Xpress",
+    tanggalKirim: "2026-06-06",
+    paket: "0CLP27",
+    total: "Rp 250.000",
+    perjalanan:[
+      {
+        waktu: "2026-06-06 10:12:20",
+        keterangan: "Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka"
+      },
+      {
+        waktu: "2026-06-08 14:07:56",
+        keterangan: "Tiba di Hub: TANGERANG SELATAN"
+      },      
+      {
+        waktu: "2026-06-09 20:12:20",
+        keterangan: "Paket menuju ke Banyumas HUB"
+      },
+      {
+        waktu: "2026-06-09 22:15:33",
+        keterangan: "Tiba di Hub: Kab.Banyumas"
+      },
+      {
+        waktu: "2026-06-10 11:06:12",
+        keterangan: "Pesanan dikirim dari lokasi sortir Banyumas"
+      },
+      {
+        waktu: "2026-06-10 14:15:33",
+        keterangan: "Pesanan dalam proses pengantaran menuju lokasi anda"
+      },
+      {
+        waktu: "2026-06-10 16:00:00",
+        keterangan: "Paket Selesai Diantar. Penerima: Khafifatul Isaroh. Lihat Bukti Pengiriman"
+      }
+      
+    ]
+  },
+};
+=== ./js/components/dataBahanAjar.js ===
+var app = new Vue({
+    el: '#app',
+    data: {
+        showEditModal: false, showAddModal: false, showConfirmLogout: false,
+        showSuccessPopup: false, showLogoutPopup: false, showDeletePopup: false,
+        deleteIndex: null, deleteItemName: "",
+        filters: { upbjj: "", kategori: "", statusStok: "" },
+        sortBy: "",
+        upbjjList: [], kategoriList: [], pengirimanList: [], paket: [],
+        stok: [],
+        tracking: {},
+        newTracking: { nim: "", nama: "", ekspedisi: "", paket: "", tanggalKirim: "" },
+        editIndex: null,
+        editItem: { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" },
+        newItem: { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" }
+    },
+    computed: {
+        filteredStok() {
+            let result = [...this.stok];
+            if (this.filters.upbjj) result = result.filter(i => i.upbjj === this.filters.upbjj);
+            if (this.filters.upbjj && this.filters.kategori) result = result.filter(i => i.kategori === this.filters.kategori);
+            if (this.filters.statusStok === 'reorder') result = result.filter(i => i.qty < i.safety || i.qty === 0);
+            else if (this.filters.statusStok === 'kosong') result = result.filter(i => i.qty === 0);
+            if (this.sortBy === 'judul') result.sort((a,b) => a.judul.localeCompare(b.judul));
+            else if (this.sortBy === 'qty') result.sort((a,b) => a.qty - b.qty);
+            else if (this.sortBy === 'harga') result.sort((a,b) => a.harga - b.harga);
+            return result;
+        },
+        generatedDO() {
+            const tahun = new Date().getFullYear();
+            const jumlah = Object.keys(this.tracking).length + 1;
+            return `DO${tahun}-${String(jumlah).padStart(3,'0')}`;
+        },
+        selectedPaket() {
+            return this.paket.find(p => p.kode === this.newTracking.paket);
+        }
+    },
+    async mounted() {
+        this.upbjjList = await API.getUpbjjList();
+        this.kategoriList = await API.getKategoriList();
+        this.pengirimanList = await API.getPengirimanList();
+        this.paket = await API.getPaketList();
+        this.stok = await API.getAllStok();
+        this.tracking = await API.getAllTracking();
+    },
+    methods: {
+        async openEdit(item) {
+            this.editIndex = this.stok.indexOf(item);
+            this.editItem = { ...item };
+            this.showEditModal = true;
+        },
+        async saveEdit() {
+            if (this.editIndex !== null) {
+                await API.updateStok(this.editIndex, this.editItem);
+                this.stok = await API.getAllStok();
+            }
+            this.showEditModal = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        async addTracking() {
+            const nomorBaru = this.generatedDO;
+            const newData = {
+                nim: this.newTracking.nim, nama: this.newTracking.nama, status: "Diproses",
+                ekspedisi: this.newTracking.ekspedisi, tanggalKirim: this.newTracking.tanggalKirim,
+                paket: this.newTracking.paket, total: this.selectedPaket ? this.selectedPaket.harga : 0,
+                perjalanan: [{ waktu: new Date().toLocaleString(), keterangan: "DO berhasil dibuat" }]
+            };
+            await API.addTracking(nomorBaru, newData);
+            this.tracking = await API.getAllTracking();
+            this.newTracking = { nim: "", nama: "", ekspedisi: "", paket: "", tanggalKirim: "" };
+        },
+        openAdd() {
+            this.newItem = { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" };
+            this.showAddModal = true;
+        },
+        async saveAdd() {
+            await API.addStok({ ...this.newItem });
+            this.stok = await API.getAllStok();
+            this.showAddModal = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        openDelete(item) {
+            this.deleteIndex = this.stok.indexOf(item);
+            this.deleteItemName = item.judul;
+            this.showDeletePopup = true;
+        },
+        async confirmDelete() {
+            if (this.deleteIndex !== null) {
+                await API.deleteStok(this.deleteIndex);
+                this.stok = await API.getAllStok();
+            }
+            this.showDeletePopup = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        resetFilters() {
+            this.filters = { upbjj: "", kategori: "", statusStok: "" };
+            this.sortBy = "";
+        },
+        triggerLogout() {
+            this.showLogoutPopup = true;
+            setTimeout(() => {
+                this.showLogoutPopup = false;
+                window.location.href = "login.html";
+            }, 2000);
+        },
+        confirmLogout() {
+            sessionStorage.removeItem("loggedInUser");
+            window.location.href = "login.html";
+        },
+    },
+    watch: {
+        'filters.upbjj'(newVal) { if (!newVal) this.filters.kategori = ""; }
+    }
+});
+
+
+=== ./js/components/login.js ===
+var app = new Vue({
+    el: '#app',
+    data: {
+        email: "",
+        password: "",
+        showPassword: false,
+        showForgotModal: false,
+        showRegisterModal: false,
+        showSuccessPopup: false,
+        loggedInUser: {}
+    },
+    methods: {
+        async login() {
+            const user = await API.login(this.email, this.password);
+            if (user) {
+                sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+                this.loggedInUser = user;
+                this.showSuccessPopup = true;
+            } else {
+                alert("Email atau password salah!");
+            }
+        },
+        togglePassword() {
+            this.showPassword = !this.showPassword;
+        },
+        goDashboard() {
+            window.location.href = "dashboard.html";
+        }
+    }
+});
+=== ./js/components/script.js ===
+const greetingMessage = document.getElementById("greeting-message");
+const userInfo = document.getElementById("user-info");
+
+if (greetingMessage && userInfo) {
+    const loggedUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+    const hour = new Date().getHours();
+    let greeting;
+    if (hour < 12) {
+        greeting = "Selamat pagi";
+    } else if (hour < 17) {
+        greeting = "Selamat siang";
+    } else {
+        greeting = "Selamat sore";
+    }
+    greetingMessage.textContent = `${greeting}, ${loggedUser ? loggedUser.nama : 'Pengguna'}`;
+    userInfo.textContent = loggedUser ? `pengguna SITTA (${loggedUser.role} - ${loggedUser.lokasi})` : 'Pengguna SITTA';
+}
+
+const logoutBtn = document.getElementById("logout-btn");
+const logoutPopup = document.getElementById("logout-popup");
+const cancelLogout = document.getElementById("cancel-logout");
+const confirmLogout = document.getElementById("confirm-logout");
+
+if (logoutBtn && logoutPopup) {
+    logoutBtn.addEventListener("click", function() {
+        logoutPopup.style.display = "flex";
+    });
+}
+
+if (cancelLogout) {
+    cancelLogout.addEventListener("click", function() {
+        logoutPopup.style.display = "none";
+    });
+}
+
+if (confirmLogout) {
+    confirmLogout.addEventListener("click", function() {
+        sessionStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
+    });
+}
+=== ./js/components/stock.js ===
+function showNotif(message, type) {
+    const notif = document.getElementById("notif");
+    notif.textContent = message;
+    notif.className = `notif show ${type}`;
+    setTimeout(() => {
+        notif.classList.remove("show");
+    }, 3000);
+}
+
+function renderStokTable() {
+    if (!stokTableBody) return;
+    stokTableBody.innerHTML = '';
+    dataBahanAjar.forEach((item, index) => {
+        const row = stokTableBody.insertRow();
+        const cellCover = row.insertCell();
+        cellCover.innerHTML = `<img src="${item.cover}" alt="Cover ${item.namaBarang}" onerror="this.onerror=null;this.src='img/placeholder.jpg';" title="${item.namaBarang}">`;
+        row.insertCell().textContent = item.kodeLokasi;
+        row.insertCell().textContent = item.kodeBarang;
+        row.insertCell().textContent = item.namaBarang;
+        row.insertCell().textContent = item.jenisBarang;
+        row.insertCell().textContent = item.edisi;
+        const cellStok = row.insertCell();
+        cellStok.textContent = item.stok;
+        if (item.stok < 200) {
+            cellStok.style.backgroundColor = '#ff9009';
+            cellStok.style.fontWeight = 'bold';
+        }
+        const cellAksi = row.insertCell();
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Hapus';
+        deleteButton.className = 'delete-button';
+        deleteButton.setAttribute('data-index', index);
+        deleteButton.addEventListener('click', (e) => {
+            const itemIndex = parseInt(e.target.getAttribute('data-index'));
+            deleteStok(itemIndex);
+        });
+        cellAksi.appendChild(deleteButton);
+    });
+}
+
+if (stokTableBody) {
+    renderStokTable();
+}
+
+function deleteStok(index) {
+    const namaBarang = dataBahanAjar[index].namaBarang;
+    const konfirmasi = confirm(`Apakah Anda yakin ingin menghapus stok untuk Bahan Ajar: "${namaBarang}"?`);
+    if (konfirmasi) {
+        dataBahanAjar.splice(index, 1);
+        renderStokTable();
+        showNotif(`Bahan Ajar "${namaBarang}" berhasil dihapus dari sistem.`, "success");
+    }
+}
+
+if (addStockBtn) {
+    addStockBtn.addEventListener('click', () => {
+        addStockFormSection.style.display = 'block';
+        addStockBtn.style.display = 'none';
+    });
+    cancelAddBtn.addEventListener('click', () => {
+        addStockFormSection.style.display = 'none';
+        addStockBtn.style.display = 'block';
+        newStockForm.reset();
+    });
+}
+
+if (newStockForm) {
+    newStockForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const namaBarangInput = document.getElementById('namaBarangNew').value;
+        const generatedCoverPath = 'img/' + namaBarangInput.toLowerCase().replace(/\s/g, '_').replace(/[^a-z0-9_]/g, '') + '.jpg';
+        const newStock = {
+            kodeLokasi: document.getElementById('kodeLokasiNew').value.toUpperCase(),
+            kodeBarang: document.getElementById('kodeBarangNew').value.toUpperCase(),
+            namaBarang: namaBarangInput,
+            jenisBarang: document.getElementById('jenisBarangNew').value.toUpperCase(),
+            edisi: document.getElementById('edisiNew').value,
+            stok: parseInt(document.getElementById('stokNew').value, 10),
+            cover: generatedCoverPath,
+        };
+        dataBahanAjar.push(newStock);
+        renderStokTable();
+        newStockForm.reset();
+        addStockFormSection.style.display = 'none';
+        addStockBtn.style.display = 'block';
+        showNotif(`Bahan Ajar "${newStock.namaBarang}" berhasil ditambahkan!`, "success");
+    });
+}
+=== ./js/services/api.js ===
+const STORAGE_KEYS = {
+    PENGGUNA: 'sitta_pengguna',
+    STOK: 'sitta_stok',
+    TRACKING: 'sitta_tracking',
+    UPBJJ_LIST: 'sitta_upbjj',
+    KATEGORI_LIST: 'sitta_kategori',
+    PENGIRIMAN_LIST: 'sitta_pengiriman',
+    PAKET_LIST: 'sitta_paket'
+};
+
+function initData() {
+    if (!localStorage.getItem(STORAGE_KEYS.PENGGUNA)) {
+        const defaultPengguna = [
+            { id: 1, nama: "Rina Wulandari", email: "rina@ut.ac.id", password: "rina123", role: "UPBJJ-UT", lokasi: "UPBJJ Jakarta" },
+            { id: 2, nama: "Agus Pranoto", email: "agus@ut.ac.id", password: "agus123", role: "UPBJJ-UT", lokasi: "UPBJJ Makassar" },
+            { id: 3, nama: "Khafifatul Isaroh", email: "khafifatul@ut.ac.id", password: "khafifatul123", role: "UPBJJ-UT", lokasi: "UPBJJ Purwokerto" },
+            { id: 4, nama: "Siti Marlina", email: "siti@ut.ac.id", password: "siti123", role: "Puslaba", lokasi: "Pusat" },
+            { id: 5, nama: "Doni Setiawan", email: "doni@ut.ac.id", password: "doni123", role: "Fakultas", lokasi: "FISIP" },
+            { id: 6, nama: "Admin SITTA", email: "admin@ut.ac.id", password: "admin123", role: "Administrator", lokasi: "Pusat" }
+        ];
+        localStorage.setItem(STORAGE_KEYS.PENGGUNA, JSON.stringify(defaultPengguna));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.STOK)) {
+        const defaultStok = [
+            { cover: "Pengantar Manajemen.jpg", kode: "EKMA4116", judul: "Pengantar Manajemen", kategori: "MK Wajib", upbjj: "Jakarta", lokasiRak: "R1-A3", harga: 65000, qty: 28, safety: 20, catatanHTML: "<em>Edisi 2024, cetak ulang</em>" },
+            { cover: "Pengantar Akuntansi.jpg", kode: "EKMA4115", judul: "Pengantar Akuntansi", kategori: "MK Wajib", upbjj: "Jakarta", lokasiRak: "R1-A4", harga: 60000, qty: 7, safety: 15, catatanHTML: "<strong>Cover baru</strong>" },
+            { cover: "Biologi Umum (Praktikum).jpg", kode: "BIOL4201", judul: "Biologi Umum (Praktikum)", kategori: "Praktikum", upbjj: "Surabaya", lokasiRak: "R3-B2", harga: 80000, qty: 12, safety: 10, catatanHTML: "Butuh <u>pendingin</u> untuk kit basah" },
+            { cover: "Dasar-Dasar Sosiologi.jpg", kode: "FISIP4001", judul: "Dasar-Dasar Sosiologi", kategori: "MK Pilihan", upbjj: "Makassar", lokasiRak: "R2-C1", harga: 55000, qty: 2, safety: 8, catatanHTML: "Stok <i>menipis</i>, prioritaskan reorder" }
+        ];
+        localStorage.setItem(STORAGE_KEYS.STOK, JSON.stringify(defaultStok));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.TRACKING)) {
+        const defaultTracking = {
+            "DO2025-0001": {
+                nim: "123456789", nama: "Rina Wulandari", status: "Dalam Perjalanan", ekspedisi: "JNE",
+                tanggalKirim: "2025-08-25", paket: "PAKET-UT-001", total: 120000,
+                perjalanan: [{ waktu: "2025-08-25 10:12:20", keterangan: "Penerimaan di Loket: TANGSEL" }]
+            }
+        };
+        localStorage.setItem(STORAGE_KEYS.TRACKING, JSON.stringify(defaultTracking));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.UPBJJ_LIST)) {
+        localStorage.setItem(STORAGE_KEYS.UPBJJ_LIST, JSON.stringify(["Jakarta", "Surabaya", "Makassar", "Padang", "Denpasar"]));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.KATEGORI_LIST)) {
+        localStorage.setItem(STORAGE_KEYS.KATEGORI_LIST, JSON.stringify(["MK Wajib", "MK Pilihan", "Praktikum", "Problem-Based"]));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.PENGIRIMAN_LIST)) {
+        localStorage.setItem(STORAGE_KEYS.PENGIRIMAN_LIST, JSON.stringify([{ kode: "REG", nama: "Reguler (3-5 hari)" }, { kode: "EXP", nama: "Ekspres (1-2 hari)" }]));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.PAKET_LIST)) {
+        localStorage.setItem(STORAGE_KEYS.PAKET_LIST, JSON.stringify([
+            { kode: "PAKET-UT-001", nama: "PAKET IPS Dasar", isi: ["EKMA4116", "EKMA4115"], harga: 120000 },
+            { kode: "PAKET-UT-002", nama: "PAKET IPA Dasar", isi: ["BIOL4201", "FISIP4001"], harga: 140000 }
+        ]));
+    }
+}
+
+const API = {
+    async login(email, password) {
+        initData();
+        const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.PENGGUNA));
+        const user = users.find(u => u.email === email && u.password === password);
+        return user ? { ...user } : null;
+    },
+    async getAllStok() {
+        initData();
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.STOK));
+    },
+    async addStok(item) {
+        const stok = await this.getAllStok();
+        stok.unshift(item);
+        localStorage.setItem(STORAGE_KEYS.STOK, JSON.stringify(stok));
+        return item;
+    },
+    async updateStok(index, newItem) {
+        const stok = await this.getAllStok();
+        stok[index] = newItem;
+        localStorage.setItem(STORAGE_KEYS.STOK, JSON.stringify(stok));
+        return newItem;
+    },
+    async deleteStok(index) {
+        const stok = await this.getAllStok();
+        stok.splice(index, 1);
+        localStorage.setItem(STORAGE_KEYS.STOK, JSON.stringify(stok));
+    },
+    async getAllTracking() {
+        initData();
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.TRACKING));
+    },
+    async addTracking(doNumber, data) {
+        const tracking = await this.getAllTracking();
+        tracking[doNumber] = data;
+        localStorage.setItem(STORAGE_KEYS.TRACKING, JSON.stringify(tracking));
+        return data;
+    },
+    async getUpbjjList() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.UPBJJ_LIST));
+    },
+    async getKategoriList() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.KATEGORI_LIST));
+    },
+    async getPengirimanList() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.PENGIRIMAN_LIST));
+    },
+    async getPaketList() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAKET_LIST));
+    }
+};
+=== ./package.json ===
+{
+  "name": "package.json",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build",
+    "lint": "run-s lint:*",
+    "lint:oxlint": "oxlint . --fix",
+    "lint:eslint": "eslint . --fix --cache",
+    "format": "oxfmt src/"
+  },
+  "dependencies": {
+    "vue": "^3.5.32",
+    "vue-router": "^5.0.4"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.12.2",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vitejs/plugin-vue-jsx": "^5.1.5",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-oxlint": "~1.60.0",
+    "eslint-plugin-vue": "~10.8.0",
+    "jiti": "^2.6.1",
+    "npm-run-all2": "^8.0.4",
+    "oxfmt": "^0.45.0",
+    "oxlint": "~1.60.0",
+    "typescript": "~6.0.0",
+    "vite": "^8.0.8",
+    "vite-plugin-vue-devtools": "^8.1.1",
+    "vue-tsc": "^3.2.6"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
+
+=== ./templates/dashboard.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="wave-container">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+    </div>
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" class="LogoUTPutih" style="height: 70px !important; width: auto !important; max-height: 70px !important;">
+            <h1>Dashboard</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="active">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn" id="laporanBtn">Laporan <span id="arrow">▼</span></button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO Bahan Ajar</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi Bahan Ajar</a></li>
+                <li><a href="#">Histori Transaksi Bahan Ajar</a></li>
+                <li><button id="logout-btn" class="logout-button">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="greeting">
+            <div>
+                <h2 id="greeting-message">Selamat Datang!</h2>
+                <p>Anda login sebagai <span id="user-info">Pengguna SITTA</span>.</p>
+            </div>
+            <img src="../assets/img/LogoUT.png" alt="Logo UT" class="greeting-logo">
+        </section>
+        <section class="dashboard-menu">
+            <a href="stock.html" class="menu-card">
+                <div class="icon">📚</div>
+                <div class="text">
+                    <h3>Informasi Bahan Ajar</h3>
+                    <p>Kelola data bahan ajar</p>
+                </div>
+            </a>
+            <a href="tracking.html" class="menu-card">
+                <div class="icon">🚚</div>
+                <div class="text">
+                    <h3>Tracking Pengiriman</h3>
+                    <p>Pantau status pengiriman</p>
+                </div>
+            </a>
+            <a href="#" class="menu-card">
+                <div class="icon">📑</div>
+                <div class="text">
+                    <h3>Laporan</h3>
+                    <p>Monitoring Progress DO dan Rekap Data Bahan Ajar</p>
+                </div>
+            </a>
+            <a href="#" class="menu-card">
+                <div class="icon">🔄</div>
+                <div class="text">
+                    <h3>Histori Transaksi</h3>
+                    <p>Riwayat semua aktivitas</p>
+                </div>
+            </a>
+        </section>
+    </main>
+    <div id="logout-popup" class="logout-popup">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button id="cancel-logout">Batal</button>
+                <button id="confirm-logout">Keluar</button>
+            </div>
+        </div>
+    </div>
+    <script src="../js/components/script.js"></script>
+    <script>
+        // dropdown manual (karena tidak pakai Vue di dashboard)
+        const laporanBtn = document.getElementById('laporanBtn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const arrow = document.getElementById('arrow');
+        if(laporanBtn) {
+            laporanBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownContent.classList.toggle('show');
+                arrow.textContent = dropdownContent.classList.contains('show') ? '▲' : '▼';
+            });
+            window.addEventListener('click', () => {
+                dropdownContent.classList.remove('show');
+                arrow.textContent = '▼';
+            });
+        }
+    </script>
+</body>
+</html>
+=== ./templates/histori.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histori Transaksi - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-weight: bold; font-size: 12px; }
+        .filter-group input, .filter-group select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; min-width: 160px; }
+        .btn-reset { background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Histori Transaksi Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html" class="active">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Histori Transaksi Pemesanan Bahan Ajar</h2>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Cari NIM / Nama</label>
+                <input type="text" v-model="searchText" placeholder="NIM atau Nama">
+            </div>
+            <div class="filter-group">
+                <label>Status</label>
+                <select v-model="filterStatus">
+                    <option value="">Semua</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Urutkan</label>
+                <select v-model="sortBy">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                </select>
+            </div>
+            <button class="btn-reset" @click="resetFilter">Reset Filter</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nomor DO</th>
+                        <th>Tanggal Kirim</th>
+                        <th>NIM</th>
+                        <th>Nama Penerima</th>
+                        <th>Paket</th>
+                        <th>Ekspedisi</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in filteredHistori" :key="item.doNumber">
+                        <td>{{ item.doNumber }}</td>
+                        <td>{{ item.tanggalKirim }}</td>
+                        <td>{{ item.nim }}</td>
+                        <td>{{ item.nama }}</td>
+                        <td>{{ item.paket }}</td>
+                        <td>{{ item.ekspedisi }}</td>
+                        <td><span :class="'status-badge status-' + item.status.replace(/ /g, '_')">{{ item.status }}</span></td>
+                        <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+                    </tr>
+                    <tr v-if="filteredHistori.length === 0">
+                        <td colspan="8" style="text-align:center;">Tidak ada histori transaksi</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Popup logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tracking: {},
+            searchText: '',
+            filterStatus: '',
+            sortBy: 'newest',
+            showLogoutPopup: false
+        },
+        computed: {
+            historiList() {
+                let list = Object.entries(this.tracking).map(([doNumber, data]) => ({
+                    doNumber,
+                    ...data
+                }));
+                if (this.sortBy === 'newest') {
+                    list.sort((a,b) => new Date(b.tanggalKirim) - new Date(a.tanggalKirim));
+                } else {
+                    list.sort((a,b) => new Date(a.tanggalKirim) - new Date(b.tanggalKirim));
+                }
+                return list;
+            },
+            filteredHistori() {
+                let result = [...this.historiList];
+                if (this.searchText) {
+                    const lower = this.searchText.toLowerCase();
+                    result = result.filter(item => 
+                        item.nim.toLowerCase().includes(lower) || 
+                        item.nama.toLowerCase().includes(lower)
+                    );
+                }
+                if (this.filterStatus) {
+                    result = result.filter(item => item.status === this.filterStatus);
+                }
+                return result;
+            }
+        },
+        async mounted() {
+            this.tracking = await API.getAllTracking();
+        },
+        methods: {
+            resetFilter() {
+                this.searchText = '';
+                this.filterStatus = '';
+                this.sortBy = 'newest';
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>
+=== ./templates/laporan-monitoring.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Progress DO - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .status-Diproses { background: #ffc107; color: #333; }
+        .status-Dikirim { background: #17a2b8; color: white; }
+        .status-Dalam_Perjalanan { background: #fd7e14; color: white; }
+        .status-Selesai { background: #28a745; color: white; }
+        .filter-bar { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-weight: bold; font-size: 12px; }
+        .filter-group select, .filter-group input { padding: 8px; border-radius: 6px; border: 1px solid #ccc; min-width: 160px; }
+        .btn-reset { background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+        .detail-link { color: #007bff; text-decoration: none; cursor: pointer; }
+        .detail-link:hover { text-decoration: underline; }
+        .modal-detail .modal-content { max-width: 600px; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Monitoring Progress DO</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html" class="active">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Monitoring Progress Delivery Order (DO)</h2>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Status</label>
+                <select v-model="filterStatus">
+                    <option value="">Semua</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Cari NIM / Nama</label>
+                <input type="text" v-model="searchText" placeholder="NIM atau Nama">
+            </div>
+            <button class="btn-reset" @click="resetFilter">Reset Filter</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nomor DO</th>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Status</th>
+                        <th>Ekspedisi</th>
+                        <th>Tanggal Kirim</th>
+                        <th>Total</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(doItem, doNumber) in filteredTracking" :key="doNumber">
+                        <td>{{ doNumber }}</td>
+                        <td>{{ doItem.nim }}</td>
+                        <td>{{ doItem.nama }}</td>
+                        <td><span :class="'status-badge status-' + doItem.status.replace(/ /g, '_')">{{ doItem.status }}</span></td>
+                        <td>{{ doItem.ekspedisi }}</td>
+                        <td>{{ doItem.tanggalKirim }}</td>
+                        <td>Rp {{ doItem.total.toLocaleString('id-ID') }}</td>
+                        <td><a href="#" class="detail-link" @click.prevent="showDetail(doNumber)">Lihat Timeline</a></td>
+                    </tr>
+                    <tr v-if="Object.keys(filteredTracking).length === 0">
+                        <td colspan="8" style="text-align:center;">Tidak ada data DO</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal Detail Timeline -->
+    <div class="modal" v-if="showModal" @click.self="showModal=false">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-btn" @click="showModal=false">&times;</span>
+            <h3>Timeline Pengiriman</h3>
+            <p><strong>Nomor DO:</strong> {{ selectedDO }}</p>
+            <p><strong>Penerima:</strong> {{ selectedData?.nama }} ({{ selectedData?.nim }})</p>
+            <ul class="timeline" style="margin-top: 20px;">
+                <li v-for="(event, idx) in selectedData?.perjalanan" :key="idx">
+                    <strong>{{ event.waktu }}</strong><br>
+                    <span>{{ event.keterangan }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Popup konfirmasi logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tracking: {},
+            filterStatus: '',
+            searchText: '',
+            showModal: false,
+            selectedDO: '',
+            selectedData: null,
+            showLogoutPopup: false
+        },
+        computed: {
+            filteredTracking() {
+                let result = { ...this.tracking };
+                if (this.filterStatus) {
+                    result = Object.fromEntries(
+                        Object.entries(result).filter(([_, val]) => val.status === this.filterStatus)
+                    );
+                }
+                if (this.searchText) {
+                    const lowerSearch = this.searchText.toLowerCase();
+                    result = Object.fromEntries(
+                        Object.entries(result).filter(([_, val]) => 
+                            val.nim.toLowerCase().includes(lowerSearch) || 
+                            val.nama.toLowerCase().includes(lowerSearch)
+                        )
+                    );
+                }
+                return result;
+            }
+        },
+        async mounted() {
+            this.tracking = await API.getAllTracking();
+        },
+        methods: {
+            showDetail(doNumber) {
+                this.selectedDO = doNumber;
+                this.selectedData = this.tracking[doNumber];
+                this.showModal = true;
+            },
+            resetFilter() {
+                this.filterStatus = '';
+                this.searchText = '';
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>
+=== ./templates/laporan-rekap.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Bahan Ajar - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .rekap-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .rekap-title {
+            color: #f57c00;
+            border-bottom: 2px solid #f57c00;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .summary-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f57c00;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .sub-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .sub-table th {
+            background: #ff9800;
+            color: white;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Rekap Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li class="dropdown">
+                    <button class="dropbtn">Laporan ▼</button>
+                    <div class="dropdown-content">
+                        <a href="laporan-monitoring.html">Monitoring Progress DO</a>
+                        <a href="laporan-rekap.html" class="active">Rekap Bahan Ajar</a>
+                    </div>
+                </li>
+                <li><a href="histori.html">Histori Transaksi</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Rekap Data Bahan Ajar</h2>
+
+        <!-- Ringkasan global -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Ringkasan Global</h3>
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalBuku }}</div>
+                    <div class="stat-label">Total Judul Buku</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalStok }}</div>
+                    <div class="stat-label">Total Stok Semua UPBJJ</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ totalNilai }}</div>
+                    <div class="stat-label">Total Nilai Inventori (Rp)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekap per UPBJJ -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Rekap per UPBJJ</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>UPBJJ</th><th>Jumlah Judul</th><th>Total Stok</th><th>Total Nilai (Rp)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in rekapUPBJJ" :key="item.upbjj">
+                            <td>{{ item.upbjj }}</td>
+                            <td>{{ item.jumlahJudul }}</td>
+                            <td>{{ item.totalStok }}</td>
+                            <td>{{ formatRupiah(item.totalNilai) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rekap per Kategori -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Rekap per Kategori Mata Kuliah</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>Kategori</th><th>Jumlah Judul</th><th>Total Stok</th><th>Total Nilai (Rp)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in rekapKategori" :key="item.kategori">
+                            <td>{{ item.kategori }}</td>
+                            <td>{{ item.jumlahJudul }}</td>
+                            <td>{{ item.totalStok }}</td>
+                            <td>{{ formatRupiah(item.totalNilai) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Peringatan Stok Menipis -->
+        <div class="rekap-card">
+            <h3 class="rekap-title">Peringatan Stok Menipis (Qty < Safety Stock)</h3>
+            <div class="table-container">
+                <table class="sub-table">
+                    <thead>
+                        <tr><th>Kode</th><th>Judul</th><th>UPBJJ</th><th>Stok</th><th>Safety Stock</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in stokMenipis" :key="item.kode">
+                            <td>{{ item.kode }}</td>
+                            <td>{{ item.judul }}</td>
+                            <td>{{ item.upbjj }}</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ item.safety }}</td>
+                        </tr>
+                        <tr v-if="stokMenipis.length === 0"><td colspan="5">Semua stok aman</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Popup logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            stok: [],
+            showLogoutPopup: false
+        },
+        computed: {
+            totalBuku() {
+                return this.stok.length;
+            },
+            totalStok() {
+                return this.stok.reduce((sum, item) => sum + (item.qty || 0), 0);
+            },
+            totalNilai() {
+                return this.stok.reduce((sum, item) => sum + ((item.harga || 0) * (item.qty || 0)), 0);
+            },
+            rekapUPBJJ() {
+                const map = new Map();
+                this.stok.forEach(item => {
+                    const upbjj = item.upbjj;
+                    if (!map.has(upbjj)) {
+                        map.set(upbjj, { upbjj, jumlahJudul: 0, totalStok: 0, totalNilai: 0 });
+                    }
+                    const rec = map.get(upbjj);
+                    rec.jumlahJudul++;
+                    rec.totalStok += item.qty;
+                    rec.totalNilai += (item.harga * item.qty);
+                });
+                return Array.from(map.values());
+            },
+            rekapKategori() {
+                const map = new Map();
+                this.stok.forEach(item => {
+                    const kat = item.kategori;
+                    if (!map.has(kat)) {
+                        map.set(kat, { kategori: kat, jumlahJudul: 0, totalStok: 0, totalNilai: 0 });
+                    }
+                    const rec = map.get(kat);
+                    rec.jumlahJudul++;
+                    rec.totalStok += item.qty;
+                    rec.totalNilai += (item.harga * item.qty);
+                });
+                return Array.from(map.values());
+            },
+            stokMenipis() {
+                return this.stok.filter(item => item.qty < item.safety);
+            }
+        },
+        async mounted() {
+            this.stok = await API.getAllStok();
+        },
+        methods: {
+            formatRupiah(value) {
+                return 'Rp ' + value.toLocaleString('id-ID');
+            },
+            triggerLogout() {
+                this.showLogoutPopup = true;
+            },
+            confirmLogout() {
+                sessionStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        }
+    });
+</script>
+</body>
+</html>
+=== ./templates/login.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SITTA UT</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div id="app">
+    <main class="login-container">
+        <div class="login-logo-container">
+            <img src="../assets/img/LogoUT.png" alt="Logo UT" class="login-logo">
+            <h2 class="welcome-text">Selamat Datang di SITTA UT</h2>
+            <h4>Pemesanan Bahan Ajar UT</h4>
+        </div>
+        <form @submit.prevent="login">
+            <label>Email</label>
+            <input type="email" v-model="email" required placeholder="email@ut.ac.id">
+            <label>Password</label>
+            <div class="password-box">
+                <input :type="showPassword ? 'text' : 'password'" v-model="password" required placeholder="password">
+                <button type="button" class="lihat-password" @click="togglePassword">
+                    <i :class="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                </button>
+            </div>
+            <button type="submit" id="login-button">Masuk</button>
+        </form>
+        <p><button class="link-button" @click="showForgotModal = true">Lupa password?</button></p>
+        <p>Belum punya akun? <button class="link-button" @click="showRegisterModal = true">Daftar</button></p>
+    </main>
+    <div v-if="showForgotModal" class="success-popup"><div class="success-box"><div class="warning-icon"><i class="fa-solid fa-exclamation"></i></div><h2>Lupa Password</h2><p>Reset password hanya oleh Admin SITTA.</p><button @click="showForgotModal=false">OK</button></div></div>
+    <div v-if="showRegisterModal" class="success-popup"><div class="success-box"><div class="warning-icon"><i class="fa-solid fa-exclamation"></i></div><h2>Pendaftaran Akun</h2><p>Daftar hanya oleh Admin SITTA.</p><button @click="showRegisterModal=false">OK</button></div></div>
+    <div v-if="showSuccessPopup" class="success-popup"><div class="success-box"><div class="success-icon"><i class="fa-solid fa-check"></i></div><h2>Selamat {{ loggedInUser.nama }}</h2><p>Berhasil masuk ke SITTA-UT</p><button @click="goDashboard">OK</button></div></div>
+    <div class="footer"><p>© 2026 Universitas Terbuka | SITTA</p></div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/login.js"></script>
+</body>
+</html>
+=== ./templates/stock.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Bahan Ajar - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-section {
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+            gap: 12px; margin: 20px auto; padding: 15px; background: #f8f9fa;
+            border-radius: 8px; max-width: 95%; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 12px; font-weight: bold; color: #555; }
+        .filter-select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; min-width: 160px; }
+        .reset-btn { background: #dc3545; color: white; border: none; padding: 9px 14px; border-radius: 6px; cursor: pointer; }
+        .reset-btn:hover { background: #c82333; }
+    </style>
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px; width: auto;">
+            <h1>Informasi Bahan Ajar</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html" class="active">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html">Tracking Pengiriman</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <h2>Informasi Data Bahan Ajar</h2>
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>UT-Daerah</label>
+                <select class="filter-select" v-model="filters.upbjj">
+                    <option value="">Semua UT-Daerah</option>
+                    <option v-for="item in upbjjList" :value="item">{{ item }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Kategori</label>
+                <select class="filter-select" v-model="filters.kategori" :disabled="!filters.upbjj">
+                    <option value="">Semua Kategori</option>
+                    <option v-for="item in kategoriList" :value="item">{{ item }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Status Stok</label>
+                <select class="filter-select" v-model="filters.statusStok">
+                    <option value="">Semua Status</option>
+                    <option value="reorder">Butuh Re-order</option>
+                    <option value="kosong">Stok Kosong</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Urutkan</label>
+                <select class="filter-select" v-model="sortBy">
+                    <option value="">-- Tanpa Urutan --</option>
+                    <option value="judul">Judul</option>
+                    <option value="qty">Jumlah Stok</option>
+                    <option value="harga">Harga</option>
+                </select>
+            </div>
+            <button class="reset-btn" @click="resetFilters"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Cover</th><th>Kode</th><th>Judul</th><th>Kategori</th><th>UPBJJ</th><th>Lokasi Rak</th><th>Harga</th><th>Jumlah</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, idx) in filteredStok" :key="idx">
+                        <td><img v-if="item.cover" :src="'../assets/img/' + item.cover" class="table-cover" style="width:40px"><span v-else>No img</span></td>
+                        <td>{{ item.kode }}</td><td>{{ item.judul }}</td><td>{{ item.kategori }}</td><td>{{ item.upbjj }}</td>
+                        <td>{{ item.lokasiRak }}</td><td>Rp {{ item.harga.toLocaleString('id-ID') }}</td><td>{{ item.qty }}</td>
+                        <td class="status-cell">
+                            <span v-if="item.qty == 0" class="status-badge-custom status-kosong">❌ Kosong</span>
+                            <span v-else-if="item.qty < item.safety" class="status-badge-custom status-menipis">⚠ Menipis</span>
+                            <span :title="item.catatanHTML || 'Tidak ada catatan'">✔ Aman</span>
+                        </td>
+                        <td v-html="item.catatanHTML"></td>
+                        <td><button class="edit-button" @click="openEdit(item)">Edit</button> <button class="delete-button" @click="openDelete(item)">Hapus</button></td>
+                    </tr>
+                    <tr v-if="filteredStok.length === 0"><td colspan="11">Data tidak ditemukan</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="add-button-container"><button class="primary-button" @click="openAdd">+ Tambah Data Bahan Ajar Baru</button></div>
+
+        <!-- Modal Edit -->
+        <div class="edit-modal" v-if="showEditModal">
+            <div class="edit-box">
+                <h2>EDIT DATA</h2>
+                <div class="edit-form-grid">
+                    <input type="text" placeholder="Kode" v-model="editItem.kode">
+                    <input type="text" placeholder="Judul" v-model="editItem.judul">
+                    <select v-model="editItem.kategori"><option value="">Pilih Kategori</option><option v-for="k in kategoriList" :value="k">{{ k }}</option></select>
+                    <select v-model="editItem.upbjj"><option value="">Pilih UPBJJ</option><option v-for="u in upbjjList" :value="u">{{ u }}</option></select>
+                    <input type="text" placeholder="Lokasi Rak" v-model="editItem.lokasiRak">
+                    <input type="number" placeholder="Harga" v-model="editItem.harga">
+                    <input type="number" placeholder="Qty" v-model="editItem.qty">
+                    <input type="number" placeholder="Safety Stock" v-model="editItem.safety">
+                </div>
+                <textarea placeholder="Catatan HTML" v-model="editItem.catatanHTML"></textarea>
+                <div class="edit-buttons"><button class="cancel-edit-btn" @click="showEditModal=false">Batal</button><button class="save-edit-btn" @click="saveEdit">Simpan</button></div>
+            </div>
+        </div>
+
+        <!-- Modal Tambah -->
+        <div class="edit-modal" v-if="showAddModal">
+            <div class="edit-box">
+                <h2>TAMBAH BAHAN AJAR</h2>
+                <div class="edit-form-grid">
+                    <input type="text" placeholder="Nama file cover (contoh: buku.jpg)" v-model="newItem.cover">
+                    <input type="text" placeholder="Kode" v-model="newItem.kode">
+                    <input type="text" placeholder="Judul" v-model="newItem.judul">
+                    <select v-model="newItem.kategori"><option value="">Pilih Kategori</option><option v-for="k in kategoriList" :value="k">{{ k }}</option></select>
+                    <select v-model="newItem.upbjj"><option value="">Pilih UPBJJ</option><option v-for="u in upbjjList" :value="u">{{ u }}</option></select>
+                    <input type="text" placeholder="Lokasi Rak" v-model="newItem.lokasiRak">
+                    <input type="number" placeholder="Harga" v-model="newItem.harga">
+                    <input type="number" placeholder="Qty" v-model="newItem.qty">
+                    <input type="number" placeholder="Safety Stock" v-model="newItem.safety">
+                </div>
+                <textarea placeholder="Catatan HTML" v-model="newItem.catatanHTML"></textarea>
+                <div class="edit-buttons"><button class="cancel-edit-btn" @click="showAddModal=false">Batal</button><button class="save-edit-btn" @click="saveAdd">Simpan</button></div>
+            </div>
+        </div>
+
+        <!-- Popup sukses -->
+        <div class="success-popup" v-if="showSuccessPopup"><div class="success-box"><div class="success-icon">✔</div><h2>Berhasil!</h2><p>Data tersimpan.</p><button @click="showSuccessPopup=false">OK</button></div></div>
+
+        <!-- Popup hapus -->
+        <div class="delete-popup" v-if="showDeletePopup"><div class="logout-box"><div class="logout-icon"><i class="fa-solid fa-trash"></i></div><h2>Hapus Data?</h2><p>Yakin hapus <strong>{{ deleteItemName }}</strong>?</p><div class="logout-buttons"><button @click="showDeletePopup=false">Batal</button><button @click="confirmDelete">Ya, Hapus</button></div></div></div>
+
+        <!-- Popup konfirmasi logout -->
+        <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+            <div class="logout-box">
+                <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+                <h2>Apakah anda ingin keluar?</h2>
+                <p>Sesi login akan diakhiri.</p>
+                <div class="logout-buttons">
+                    <button @click="showLogoutPopup = false">Batal</button>
+                    <button @click="confirmLogout">Keluar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/dataBahanAjar.js"></script>
+</body>
+</html>
+=== ./templates/tracking.html ===
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Pengiriman - SITTA</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="dashboard-page">
+<div id="app">
+    <header class="header">
+        <div class="brand-container">
+            <img src="../assets/img/LogoUTPutih.png" alt="Logo UT" style="height: 70px;">
+            <h1>Tracking Pengiriman</h1>
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Beranda</a></li>
+                <li><a href="stock.html">Informasi Bahan Ajar</a></li>
+                <li><a href="tracking.html" class="active">Tracking Pengiriman</a></li>
+                <li><button class="logout-button" @click="triggerLogout">Keluar</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="tracking-form-box">
+            <h2>Tracking DO</h2>
+            <label>Nomor DO:</label>
+            <input type="text" :value="generatedDO" readonly class="readonly-input">
+            <label>NIM:</label>
+            <input type="text" v-model="newTracking.nim" placeholder="Contoh: 230411100001">
+            <label>Nama:</label>
+            <input type="text" v-model="newTracking.nama" placeholder="Contoh: Rina Wulandari">
+            <div class="tracking-row">
+                <div><label>Ekspedisi:</label><select v-model="newTracking.ekspedisi"><option value="">Pilih</option><option v-for="item in pengirimanList" :value="item.nama">{{ item.nama }}</option></select></div>
+                <div><label>Paket Bahan Ajar:</label><select v-model="newTracking.paket"><option value="">Pilih Paket</option><option v-for="item in paket" :value="item.kode">{{ item.kode }} - {{ item.nama }}</option></select></div>
+                <div><label>Tanggal Kirim:</label><input type="date" v-model="newTracking.tanggalKirim"></div>
+            </div>
+            <div v-if="selectedPaket" class="detail-paket">
+                <h4>Detail Paket</h4>
+                <p><strong>Kode:</strong> {{ selectedPaket.kode }}</p><p><strong>Nama:</strong> {{ selectedPaket.nama }}</p>
+                <p><strong>Isi Paket:</strong></p><ul><li v-for="isi in selectedPaket.isi">{{ isi }}</li></ul>
+                <p><strong>Total Harga:</strong> Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}</p>
+            </div>
+            <button type="button" @click="addTracking">Tambah DO Baru</button>
+        </section>
+        <section class="tracking-table">
+            <h2>Daftar Tracking DO</h2>
+            <table>
+                <thead><tr><th>Nomor DO</th><th>NIM</th><th>Nama</th><th>Ekspedisi</th><th>Paket</th><th>Tanggal Kirim</th><th>Total</th></tr></thead>
+                <tbody>
+                    <tr v-for="(item, key) in tracking" :key="key">
+                        <td>{{ key }}</td><td>{{ item.nim }}</td><td>{{ item.nama }}</td><td>{{ item.ekspedisi }}</td><td>{{ item.paket }}</td><td>{{ item.tanggalKirim }}</td><td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Popup konfirmasi logout -->
+    <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
+        <div class="logout-box">
+            <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <h2>Apakah anda ingin keluar?</h2>
+            <p>Sesi login akan diakhiri.</p>
+            <div class="logout-buttons">
+                <button @click="showLogoutPopup = false">Batal</button>
+                <button @click="confirmLogout">Keluar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/services/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="../js/components/dataBahanAjar.js"></script>
+</body>
+</html>
+=== ./tsconfig.app.json ===
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    // Extra safety for array and object lookups, but may have false positives.
+    "noUncheckedIndexedAccess": true,
+
+    // Path mapping for cleaner imports.
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // `vue-tsc --build` produces a .tsbuildinfo file for incremental type-checking.
+    // Specified here to keep it out of the root directory.
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+  }
+}
+
+=== ./tsconfig.node.json ===
+// TSConfig for modules that run in Node.js environment via either transpilation or type-stripping.
+{
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "include": [
+    "vite.config.*",
+    "vitest.config.*",
+    "cypress.config.*",
+    "playwright.config.*",
+    "eslint.config.*"
+  ],
+  "compilerOptions": {
+    // Most tools use transpilation instead of Node.js's native type-stripping.
+    // Bundler mode provides a smoother developer experience.
+    "module": "preserve",
+    "moduleResolution": "bundler",
+
+    // Include Node.js types and avoid accidentally including other `@types/*` packages.
+    "types": ["node"],
+
+    // Disable emitting output during `vue-tsc --build`, which is used for type-checking only.
+    "noEmit": true,
+
+    // `vue-tsc --build` produces a .tsbuildinfo file for incremental type-checking.
+    // Specified here to keep it out of the root directory.
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
+  }
+}
+
+=== ./vite.config.ts ===
+import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    vueJsx(),
+    vueDevTools(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+  },
+})
+

@@ -84,7 +84,7 @@
                         <td class="status-cell">
                             <span v-if="item.qty == 0" class="status-badge-custom status-kosong">❌ Kosong</span>
                             <span v-else-if="item.qty < item.safety" class="status-badge-custom status-menipis">⚠ Menipis</span>
-                            <span v-else class="status-badge-custom status-aman">✔ Aman</span>
+                            <span :title="item.catatanHTML || 'Tidak ada catatan'">✔ Aman</span>
                         </td>
                         <td v-html="item.catatanHTML"></td>
                         <td><button class="edit-button" @click="openEdit(item)">Edit</button> <button class="delete-button" @click="openDelete(item)">Hapus</button></td>
@@ -153,6 +153,17 @@
             </div>
         </div>
     </main>
+    <!-- Popup Error -->
+    <div class="success-popup" v-if="showErrorPopup" style="background: rgba(0,0,0,0.4);">
+        <div class="success-box" style="border-top: 5px solid #f44336;">
+            <div class="success-icon" style="background: #f44336;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h2>Data Tidak Lengkap / Error</h2>
+            <p>{{ errorMessage }}</p>
+            <button @click="closeErrorPopup" style="background: #f44336;">OK</button>
+        </div>
+    </div>
 </div>
 <script src="../js/services/api.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>

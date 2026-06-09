@@ -105,5 +105,42 @@ const API = {
     },
     async getPaketList() {
         return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAKET_LIST));
+    },
+
+    // Method baru untuk mengurangi stok berdasarkan kode barang
+    async kurangiStok(kodeBarang, jumlah) {
+        const stok = await this.getAllStok();
+        const item = stok.find(i => i.kode === kodeBarang);
+        if (!item) throw new Error(`Barang dengan kode ${kodeBarang} tidak ditemukan`);
+        if (item.qty < jumlah) throw new Error(`Stok ${kodeBarang} tidak mencukupi (tersisa ${item.qty})`);
+        item.qty -= jumlah;
+        localStorage.setItem(STORAGE_KEYS.STOK, JSON.stringify(stok));
+        return true;
+    },
+
+    // Cek stok untuk semua barang dalam paket
+    async cekStokPaket(paketKode) {
+        const paketList = await this.getPaketList();
+        const paket = paketList.find(p => p.kode === paketKode);
+        if (!paket) throw new Error('Paket tidak dikenal');
+        const stok = await this.getAllStok();
+        for (const kode of paket.isi) {
+            const item = stok.find(i => i.kode === kode);
+            if (!item) throw new Error(`Bahan ajar dengan kode ${kode} tidak ditemukan dalam stok`);
+            if (item.qty <= 0) {
+                throw new Error(`Stok bahan ajar ${kode} (${item.judul}) habis`);
+            }
+            if (item.qty < 1) throw new Error(`Stok ${kode} tidak mencukupi`);
+        }
+        return paket;
+    },
+
+    // Proses pengurangan stok untuk seluruh isi paket
+    async kurangiStokPaket(paketKode) {
+        const paket = await this.cekStokPaket(paketKode);
+        for (const kode of paket.isi) {
+            await this.kurangiStok(kode, 1);
+        }
+        return true;
     }
 };
