@@ -7,8 +7,8 @@ var app = new Vue({
         showSuccessPopup: false,
         showLogoutPopup: false,
         showDeletePopup: false,
-        showErrorPopup: false,      // baru
-        errorMessage: '',           // baru
+        showErrorPopup: false,
+        errorMessage: '',
         deleteIndex: null,
         deleteItemName: "",
         filters: { upbjj: "", kategori: "", statusStok: "" },
@@ -54,7 +54,15 @@ var app = new Vue({
         this.tracking = await API.getAllTracking();
     },
     methods: {
-        // Validasi untuk item baru
+        // Membersihkan tag HTML untuk tooltip
+        stripHtml(html) {
+            if (!html) return '';
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            return temp.textContent || temp.innerText || '';
+        },
+
+        // Validasi form tambah bahan ajar
         validateNewItem() {
             const required = ['cover', 'kode', 'judul', 'kategori', 'upbjj', 'lokasiRak', 'harga', 'qty', 'safety'];
             for (let field of required) {
@@ -80,7 +88,8 @@ var app = new Vue({
             this.newItem.safety = Number(this.newItem.safety);
             return true;
         },
-        // Validasi untuk edit item
+
+        // Validasi form edit bahan ajar
         validateEditItem() {
             const required = ['kode', 'judul', 'kategori', 'upbjj', 'lokasiRak', 'harga', 'qty', 'safety'];
             for (let field of required) {
@@ -106,6 +115,7 @@ var app = new Vue({
             this.editItem.safety = Number(this.editItem.safety);
             return true;
         },
+
         // Validasi form tracking DO
         validateTrackingForm() {
             if (!this.newTracking.nim) {
@@ -130,11 +140,15 @@ var app = new Vue({
             }
             return true;
         },
+
+        // Buka modal edit
         async openEdit(item) {
             this.editIndex = this.stok.indexOf(item);
             this.editItem = { ...item };
             this.showEditModal = true;
         },
+
+        // Simpan edit
         async saveEdit() {
             if (!this.validateEditItem()) {
                 this.showErrorPopup = true;
@@ -148,14 +162,14 @@ var app = new Vue({
             this.showSuccessPopup = true;
             setTimeout(() => this.showSuccessPopup = false, 2000);
         },
+
+        // Tambah tracking DO (dengan pengurangan stok)
         async addTracking() {
-            // Validasi form
             if (!this.validateTrackingForm()) {
                 this.showErrorPopup = true;
                 return;
             }
-
-            // Cek stok paket
+            // Cek ketersediaan stok paket
             try {
                 await API.cekStokPaket(this.newTracking.paket);
             } catch (err) {
@@ -163,8 +177,7 @@ var app = new Vue({
                 this.showErrorPopup = true;
                 return;
             }
-
-            // Kurangi stok untuk semua barang dalam paket
+            // Kurangi stok
             try {
                 await API.kurangiStokPaket(this.newTracking.paket);
             } catch (err) {
@@ -172,7 +185,6 @@ var app = new Vue({
                 this.showErrorPopup = true;
                 return;
             }
-
             const nomorBaru = this.generatedDO;
             const selectedPaket = this.selectedPaket;
             const newData = {
@@ -192,10 +204,14 @@ var app = new Vue({
             this.showSuccessPopup = true;
             setTimeout(() => this.showSuccessPopup = false, 2000);
         },
+
+        // Buka modal tambah
         openAdd() {
             this.newItem = { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" };
             this.showAddModal = true;
         },
+
+        // Simpan tambah
         async saveAdd() {
             if (!this.validateNewItem()) {
                 this.showErrorPopup = true;
@@ -207,11 +223,15 @@ var app = new Vue({
             this.showSuccessPopup = true;
             setTimeout(() => this.showSuccessPopup = false, 2000);
         },
+
+        // Buka konfirmasi hapus
         openDelete(item) {
             this.deleteIndex = this.stok.indexOf(item);
             this.deleteItemName = item.judul;
             this.showDeletePopup = true;
         },
+
+        // Hapus data
         async confirmDelete() {
             if (this.deleteIndex !== null) {
                 await API.deleteStok(this.deleteIndex);
@@ -221,10 +241,14 @@ var app = new Vue({
             this.showSuccessPopup = true;
             setTimeout(() => this.showSuccessPopup = false, 2000);
         },
+
+        // Reset filter dan sorting
         resetFilters() {
             this.filters = { upbjj: "", kategori: "", statusStok: "" };
             this.sortBy = "";
         },
+
+        // Logout
         triggerLogout() {
             this.showLogoutPopup = true;
         },
@@ -232,6 +256,8 @@ var app = new Vue({
             sessionStorage.removeItem("loggedInUser");
             window.location.href = "login.html";
         },
+
+        // Tutup popup error
         closeErrorPopup() {
             this.showErrorPopup = false;
             this.errorMessage = '';
