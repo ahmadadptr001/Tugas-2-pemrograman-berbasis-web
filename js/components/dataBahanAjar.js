@@ -3,7 +3,6 @@ var app = new Vue({
     data: {
         showEditModal: false,
         showAddModal: false,
-        showConfirmLogout: false,
         showSuccessPopup: false,
         showLogoutPopup: false,
         showDeletePopup: false,
@@ -11,19 +10,28 @@ var app = new Vue({
         errorMessage: '',
         deleteIndex: null,
         deleteItemName: "",
+        isLoading: false,
+
         filters: { upbjj: "", kategori: "", statusStok: "" },
         sortBy: "",
+
         upbjjList: [],
         kategoriList: [],
         pengirimanList: [],
         paket: [],
         stok: [],
         tracking: {},
+
         newTracking: { nim: "", nama: "", ekspedisi: "", paket: "", tanggalKirim: "" },
+
+        progressSelectedDO: "",
+        progressKeterangan: "",
+
         editIndex: null,
         editItem: { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" },
         newItem: { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" }
     },
+
     computed: {
         filteredStok() {
             let result = [...this.stok];
@@ -43,8 +51,14 @@ var app = new Vue({
         },
         selectedPaket() {
             return this.paket.find(p => p.kode === this.newTracking.paket);
+        },
+        // Riwayat perjalanan untuk DO yang dipilih
+        selectedDORiwayat() {
+            if (!this.progressSelectedDO || !this.tracking[this.progressSelectedDO]) return [];
+            return this.tracking[this.progressSelectedDO].perjalanan || [];
         }
     },
+
     async mounted() {
         this.upbjjList = await API.getUpbjjList();
         this.kategoriList = await API.getKategoriList();
@@ -53,8 +67,8 @@ var app = new Vue({
         this.stok = await API.getAllStok();
         this.tracking = await API.getAllTracking();
     },
+
     methods: {
-        // Membersihkan tag HTML untuk tooltip
         stripHtml(html) {
             if (!html) return '';
             const temp = document.createElement('div');
@@ -62,7 +76,6 @@ var app = new Vue({
             return temp.textContent || temp.innerText || '';
         },
 
-        // Validasi form tambah bahan ajar
         validateNewItem() {
             const required = ['cover', 'kode', 'judul', 'kategori', 'upbjj', 'lokasiRak', 'harga', 'qty', 'safety'];
             for (let field of required) {
@@ -89,7 +102,6 @@ var app = new Vue({
             return true;
         },
 
-        // Validasi form edit bahan ajar
         validateEditItem() {
             const required = ['kode', 'judul', 'kategori', 'upbjj', 'lokasiRak', 'harga', 'qty', 'safety'];
             for (let field of required) {
@@ -116,7 +128,58 @@ var app = new Vue({
             return true;
         },
 
-        // Validasi form tracking DO
+        async openEdit(item) {
+            this.editIndex = this.stok.indexOf(item);
+            this.editItem = { ...item };
+            this.showEditModal = true;
+        },
+        async saveEdit() {
+            if (!this.validateEditItem()) {
+                this.showErrorPopup = true;
+                return;
+            }
+            if (this.editIndex !== null) {
+                await API.updateStok(this.editIndex, this.editItem);
+                this.stok = await API.getAllStok();
+            }
+            this.showEditModal = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        openAdd() {
+            this.newItem = { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" };
+            this.showAddModal = true;
+        },
+        async saveAdd() {
+            if (!this.validateNewItem()) {
+                this.showErrorPopup = true;
+                return;
+            }
+            await API.addStok({ ...this.newItem });
+            this.stok = await API.getAllStok();
+            this.showAddModal = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        openDelete(item) {
+            this.deleteIndex = this.stok.indexOf(item);
+            this.deleteItemName = item.judul;
+            this.showDeletePopup = true;
+        },
+        async confirmDelete() {
+            if (this.deleteIndex !== null) {
+                await API.deleteStok(this.deleteIndex);
+                this.stok = await API.getAllStok();
+            }
+            this.showDeletePopup = false;
+            this.showSuccessPopup = true;
+            setTimeout(() => this.showSuccessPopup = false, 2000);
+        },
+        resetFilters() {
+            this.filters = { upbjj: "", kategori: "", statusStok: "" };
+            this.sortBy = "";
+        },
+
         validateTrackingForm() {
             if (!this.newTracking.nim) {
                 this.errorMessage = 'NIM tidak boleh kosong';
@@ -141,114 +204,98 @@ var app = new Vue({
             return true;
         },
 
-        // Buka modal edit
-        async openEdit(item) {
-            this.editIndex = this.stok.indexOf(item);
-            this.editItem = { ...item };
-            this.showEditModal = true;
-        },
-
-        // Simpan edit
-        async saveEdit() {
-            if (!this.validateEditItem()) {
-                this.showErrorPopup = true;
-                return;
-            }
-            if (this.editIndex !== null) {
-                await API.updateStok(this.editIndex, this.editItem);
-                this.stok = await API.getAllStok();
-            }
-            this.showEditModal = false;
-            this.showSuccessPopup = true;
-            setTimeout(() => this.showSuccessPopup = false, 2000);
-        },
-
-        // Tambah tracking DO (dengan pengurangan stok)
         async addTracking() {
+            if (this.isLoading) return;
             if (!this.validateTrackingForm()) {
                 this.showErrorPopup = true;
                 return;
             }
-            // Cek ketersediaan stok paket
+            this.isLoading = true;
             try {
                 await API.cekStokPaket(this.newTracking.paket);
-            } catch (err) {
-                this.errorMessage = err.message;
-                this.showErrorPopup = true;
-                return;
-            }
-            // Kurangi stok
-            try {
                 await API.kurangiStokPaket(this.newTracking.paket);
+                const nomorBaru = this.generatedDO;
+                if (this.tracking[nomorBaru]) {
+                    this.errorMessage = `Nomor DO ${nomorBaru} sudah ada, coba lagi.`;
+                    this.showErrorPopup = true;
+                    return;
+                }
+                const selectedPaket = this.selectedPaket;
+                const newData = {
+                    nim: this.newTracking.nim,
+                    nama: this.newTracking.nama,
+                    status: "Diproses",
+                    ekspedisi: this.newTracking.ekspedisi,
+                    tanggalKirim: this.newTracking.tanggalKirim,
+                    paket: this.newTracking.paket,
+                    total: selectedPaket ? selectedPaket.harga : 0,
+                    perjalanan: [{ waktu: new Date().toLocaleString(), keterangan: "DO berhasil dibuat" }]
+                };
+                await API.addTracking(nomorBaru, newData);
+                this.tracking = await API.getAllTracking();
+                this.stok = await API.getAllStok();
+                this.newTracking = { nim: "", nama: "", ekspedisi: "", paket: "", tanggalKirim: "" };
+                this.showSuccessPopup = true;
+                setTimeout(() => this.showSuccessPopup = false, 2000);
             } catch (err) {
                 this.errorMessage = err.message;
                 this.showErrorPopup = true;
-                return;
+            } finally {
+                this.isLoading = false;
             }
-            const nomorBaru = this.generatedDO;
-            const selectedPaket = this.selectedPaket;
-            const newData = {
-                nim: this.newTracking.nim,
-                nama: this.newTracking.nama,
-                status: "Diproses",
-                ekspedisi: this.newTracking.ekspedisi,
-                tanggalKirim: this.newTracking.tanggalKirim,
-                paket: this.newTracking.paket,
-                total: selectedPaket ? selectedPaket.harga : 0,
-                perjalanan: [{ waktu: new Date().toLocaleString(), keterangan: "DO berhasil dibuat" }]
-            };
-            await API.addTracking(nomorBaru, newData);
-            this.tracking = await API.getAllTracking();
-            this.stok = await API.getAllStok(); // refresh stok
-            this.newTracking = { nim: "", nama: "", ekspedisi: "", paket: "", tanggalKirim: "" };
-            this.showSuccessPopup = true;
-            setTimeout(() => this.showSuccessPopup = false, 2000);
         },
 
-        // Buka modal tambah
-        openAdd() {
-            this.newItem = { cover: "", kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", harga: "", qty: "", safety: "", catatanHTML: "" };
-            this.showAddModal = true;
-        },
-
-        // Simpan tambah
-        async saveAdd() {
-            if (!this.validateNewItem()) {
+        async saveProgress() {
+            if (this.isLoading) return;
+            if (!this.progressSelectedDO) {
+                this.errorMessage = 'Pilih nomor DO terlebih dahulu';
                 this.showErrorPopup = true;
                 return;
             }
-            await API.addStok({ ...this.newItem });
-            this.stok = await API.getAllStok();
-            this.showAddModal = false;
-            this.showSuccessPopup = true;
-            setTimeout(() => this.showSuccessPopup = false, 2000);
-        },
-
-        // Buka konfirmasi hapus
-        openDelete(item) {
-            this.deleteIndex = this.stok.indexOf(item);
-            this.deleteItemName = item.judul;
-            this.showDeletePopup = true;
-        },
-
-        // Hapus data
-        async confirmDelete() {
-            if (this.deleteIndex !== null) {
-                await API.deleteStok(this.deleteIndex);
-                this.stok = await API.getAllStok();
+            if (!this.progressKeterangan.trim()) {
+                this.errorMessage = 'Status perjalanan tidak boleh kosong';
+                this.showErrorPopup = true;
+                return;
             }
-            this.showDeletePopup = false;
-            this.showSuccessPopup = true;
-            setTimeout(() => this.showSuccessPopup = false, 2000);
+            this.isLoading = true;
+            try {
+                const doNumber = this.progressSelectedDO;
+                const currentData = this.tracking[doNumber];
+                if (!currentData) throw new Error('DO tidak ditemukan');
+                
+                const waktuSekarang = new Date().toLocaleString();
+                const newPerjalanan = {
+                    waktu: waktuSekarang,
+                    keterangan: this.progressKeterangan
+                };
+                const updatedPerjalanan = [...(currentData.perjalanan || []), newPerjalanan];
+                
+                let newStatus = currentData.status;
+                const lowerKet = this.progressKeterangan.toLowerCase();
+                if (lowerKet.includes('selesai') || lowerKet.includes('diterima') || lowerKet.includes('sampai')) {
+                    newStatus = 'Selesai';
+                } else if (lowerKet.includes('dikirim') || lowerKet.includes('dikirimkan') || lowerKet.includes('diteruskan')) {
+                    newStatus = 'Dikirim';
+                } else if (lowerKet.includes('perjalanan') || lowerKet.includes('tiba di') || lowerKet.includes('menuju')) {
+                    newStatus = 'Dalam Perjalanan';
+                }
+                
+                await API.updateTracking(doNumber, {
+                    perjalanan: updatedPerjalanan,
+                    status: newStatus
+                });
+                this.tracking = await API.getAllTracking();
+                this.progressKeterangan = "";
+                this.showSuccessPopup = true;
+                setTimeout(() => this.showSuccessPopup = false, 2000);
+            } catch (err) {
+                this.errorMessage = err.message;
+                this.showErrorPopup = true;
+            } finally {
+                this.isLoading = false;
+            }
         },
 
-        // Reset filter dan sorting
-        resetFilters() {
-            this.filters = { upbjj: "", kategori: "", statusStok: "" };
-            this.sortBy = "";
-        },
-
-        // Logout
         triggerLogout() {
             this.showLogoutPopup = true;
         },
@@ -256,14 +303,15 @@ var app = new Vue({
             sessionStorage.removeItem("loggedInUser");
             window.location.href = "login.html";
         },
-
-        // Tutup popup error
         closeErrorPopup() {
             this.showErrorPopup = false;
             this.errorMessage = '';
         }
     },
+
     watch: {
-        'filters.upbjj'(newVal) { if (!newVal) this.filters.kategori = ""; }
+        'filters.upbjj'(newVal) { 
+            if (!newVal) this.filters.kategori = ""; 
+        }
     }
 });

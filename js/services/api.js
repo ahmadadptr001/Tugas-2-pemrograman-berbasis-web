@@ -94,6 +94,13 @@ const API = {
         localStorage.setItem(STORAGE_KEYS.TRACKING, JSON.stringify(tracking));
         return data;
     },
+    async updateTracking(doNumber, updatedData) {
+        const tracking = await this.getAllTracking();
+        if (!tracking[doNumber]) throw new Error(`DO ${doNumber} tidak ditemukan`);
+        tracking[doNumber] = { ...tracking[doNumber], ...updatedData };
+        localStorage.setItem(STORAGE_KEYS.TRACKING, JSON.stringify(tracking));
+        return tracking[doNumber];
+    },
     async getUpbjjList() {
         return JSON.parse(localStorage.getItem(STORAGE_KEYS.UPBJJ_LIST));
     },
@@ -107,7 +114,6 @@ const API = {
         return JSON.parse(localStorage.getItem(STORAGE_KEYS.PAKET_LIST));
     },
 
-    // Method baru untuk mengurangi stok berdasarkan kode barang
     async kurangiStok(kodeBarang, jumlah) {
         const stok = await this.getAllStok();
         const item = stok.find(i => i.kode === kodeBarang);
@@ -118,7 +124,6 @@ const API = {
         return true;
     },
 
-    // Cek stok untuk semua barang dalam paket
     async cekStokPaket(paketKode) {
         const paketList = await this.getPaketList();
         const paket = paketList.find(p => p.kode === paketKode);
@@ -127,15 +132,11 @@ const API = {
         for (const kode of paket.isi) {
             const item = stok.find(i => i.kode === kode);
             if (!item) throw new Error(`Bahan ajar dengan kode ${kode} tidak ditemukan dalam stok`);
-            if (item.qty <= 0) {
-                throw new Error(`Stok bahan ajar ${kode} (${item.judul}) habis`);
-            }
-            if (item.qty < 1) throw new Error(`Stok ${kode} tidak mencukupi`);
+            if (item.qty <= 0) throw new Error(`Stok bahan ajar ${kode} (${item.judul}) habis`);
         }
         return paket;
     },
 
-    // Proses pengurangan stok untuk seluruh isi paket
     async kurangiStokPaket(paketKode) {
         const paket = await this.cekStokPaket(paketKode);
         for (const kode of paket.isi) {

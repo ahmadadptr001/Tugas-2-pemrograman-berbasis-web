@@ -5,6 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tracking Pengiriman - SITTA</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .form-progres {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid #f57c00;
+        }
+        .form-progres h3 {
+            color: #f57c00;
+            margin-bottom: 20px;
+        }
+        .form-progres .form-group {
+            margin-bottom: 15px;
+        }
+        .form-progres label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-progres select, .form-progres textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-progres button {
+            background: #f57c00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .form-progres button:hover {
+            background: #e66a00;
+        }
+        .form-progres button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .riwayat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .riwayat-table th, .riwayat-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .riwayat-table th {
+            background-color: #f57c00;
+            color: white;
+        }
+    </style>
 </head>
 <body class="dashboard-page">
 <div id="app">
@@ -23,14 +83,14 @@
         </nav>
     </header>
     <main class="container">
+        <!-- Form Tambah DO Baru -->
         <section class="tracking-form-box">
-            <h2>Tracking DO</h2>
-            <label>Nomor DO:</label>
-            <input type="text" :value="generatedDO" readonly class="readonly-input">
-            <label>NIM:</label>
-            <input type="text" v-model="newTracking.nim" placeholder="Contoh: 230411100001">
-            <label>Nama:</label>
-            <input type="text" v-model="newTracking.nama" placeholder="Contoh: Rina Wulandari">
+            <h2>Buat Delivery Order Baru</h2>
+            <div class="tracking-row">
+                <div><label>Nomor DO (Otomatis):</label><input type="text" :value="generatedDO" readonly class="readonly-input"></div>
+                <div><label>NIM:</label><input type="text" v-model="newTracking.nim" placeholder="230411100001"></div>
+                <div><label>Nama:</label><input type="text" v-model="newTracking.nama" placeholder="Rina Wulandari"></div>
+            </div>
             <div class="tracking-row">
                 <div><label>Ekspedisi:</label><select v-model="newTracking.ekspedisi"><option value="">Pilih</option><option v-for="item in pengirimanList" :value="item.nama">{{ item.nama }}</option></select></div>
                 <div><label>Paket Bahan Ajar:</label><select v-model="newTracking.paket"><option value="">Pilih Paket</option><option v-for="item in paket" :value="item.kode">{{ item.kode }} - {{ item.nama }}</option></select></div>
@@ -38,26 +98,98 @@
             </div>
             <div v-if="selectedPaket" class="detail-paket">
                 <h4>Detail Paket</h4>
-                <p><strong>Kode:</strong> {{ selectedPaket.kode }}</p><p><strong>Nama:</strong> {{ selectedPaket.nama }}</p>
-                <p><strong>Isi Paket:</strong></p><ul><li v-for="isi in selectedPaket.isi">{{ isi }}</li></ul>
+                <p><strong>Kode:</strong> {{ selectedPaket.kode }} | <strong>Nama:</strong> {{ selectedPaket.nama }}</p>
+                <p><strong>Isi Paket:</strong> {{ selectedPaket.isi.join(', ') }}</p>
                 <p><strong>Total Harga:</strong> Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}</p>
             </div>
-            <button type="button" @click="addTracking">Tambah DO Baru</button>
+            <button type="button" @click="addTracking" :disabled="isLoading">{{ isLoading ? 'Memproses...' : 'Tambah DO Baru' }}</button>
         </section>
+
+        <!-- Tabel Daftar DO (tanpa kolom status) -->
         <section class="tracking-table">
             <h2>Daftar Tracking DO</h2>
-            <table>
-                <thead><tr><th>Nomor DO</th><th>NIM</th><th>Nama</th><th>Ekspedisi</th><th>Paket</th><th>Tanggal Kirim</th><th>Total</th></tr></thead>
-                <tbody>
-                    <tr v-for="(item, key) in tracking" :key="key">
-                        <td>{{ key }}</td><td>{{ item.nim }}</td><td>{{ item.nama }}</td><td>{{ item.ekspedisi }}</td><td>{{ item.paket }}</td><td>{{ item.tanggalKirim }}</td><td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NOMOR DO</th><th>NIM</th><th>NAMA</th>
+                            <th>EKSPEDISI</th><th>PAKET</th><th>TANGGAL KIRIM</th><th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, key) in tracking" :key="key">
+                            <td>{{ key }}</td>
+                            <td>{{ item.nim }}</td>
+                            <td>{{ item.nama }}</td>
+                            <td>{{ item.ekspedisi }}</td>
+                            <td>{{ item.paket }}</td>
+                            <td>{{ item.tanggalKirim }}</td>
+                            <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+                        </tr>
+                        <tr v-if="Object.keys(tracking).length === 0">
+                            <td colspan="7" style="text-align:center;">Belum ada data DO</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Form Tambah Progres + Tabel Riwayat -->
+        <section class="form-progres">
+            <h3><i class="fa-solid fa-truck-fast"></i> Tambah Progress Pengiriman</h3>
+            <div class="form-group">
+                <label>Pilih Nomor DO</label>
+                <select v-model="progressSelectedDO">
+                    <option value="">-- Pilih DO --</option>
+                    <option v-for="(item, key) in tracking" :value="key">{{ key }} - {{ item.nama }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Masukkan status perjalanan</label>
+                <textarea v-model="progressKeterangan" rows="3" placeholder="Contoh: Paket tiba di hub Bandung"></textarea>
+            </div>
+            <button @click="saveProgress" :disabled="!progressSelectedDO || isLoading">{{ isLoading ? 'Menyimpan...' : 'Tambah Progress' }}</button>
+
+            <!-- Tabel Riwayat Progres untuk DO yang dipilih -->
+            <div v-if="progressSelectedDO && selectedDORiwayat.length > 0" style="margin-top: 20px;">
+                <h4>Riwayat Pengiriman - {{ progressSelectedDO }}</h4>
+                <table class="riwayat-table">
+                    <thead>
+                        <tr><th>Waktu</th><th>Keterangan</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(event, idx) in selectedDORiwayat" :key="idx">
+                            <td>{{ event.waktu }}</td>
+                            <td>{{ event.keterangan }}</td>
+                        </table>
+                    </tbody>
+                </table>
+            </div>
+            <div v-else-if="progressSelectedDO && selectedDORiwayat.length === 0" style="margin-top: 20px;">
+                <p>Belum ada riwayat progres untuk DO ini.</p>
+            </div>
         </section>
     </main>
 
-    <!-- Popup konfirmasi logout -->
+    <!-- Popup Error & Sukses -->
+    <div class="success-popup" v-if="showErrorPopup" style="background: rgba(0,0,0,0.4);">
+        <div class="success-box" style="border-top: 5px solid #f44336;">
+            <div class="success-icon" style="background: #f44336;"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <h2>Validasi Gagal</h2>
+            <p>{{ errorMessage }}</p>
+            <button @click="closeErrorPopup" style="background: #f44336;">OK</button>
+        </div>
+    </div>
+    <div class="success-popup" v-if="showSuccessPopup">
+        <div class="success-box">
+            <div class="success-icon">✔</div>
+            <h2>Berhasil!</h2>
+            <p>Progres pengiriman ditambahkan.</p>
+            <button @click="showSuccessPopup=false">OK</button>
+        </div>
+    </div>
+
+    <!-- Popup logout -->
     <div class="logout-popup" v-if="showLogoutPopup" style="display: flex;">
         <div class="logout-box">
             <div class="logout-icon"><i class="fa-solid fa-circle-question"></i></div>
@@ -67,18 +199,6 @@
                 <button @click="showLogoutPopup = false">Batal</button>
                 <button @click="confirmLogout">Keluar</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Popup Error -->
-    <div class="success-popup" v-if="showErrorPopup" style="background: rgba(0,0,0,0.4);">
-        <div class="success-box" style="border-top: 5px solid #f44336;">
-            <div class="success-icon" style="background: #f44336;">
-                <i class="fa-solid fa-circle-exclamation"></i>
-            </div>
-            <h2>Validasi Gagal</h2>
-            <p>{{ errorMessage }}</p>
-            <button @click="closeErrorPopup" style="background: #f44336;">OK</button>
         </div>
     </div>
 </div>
